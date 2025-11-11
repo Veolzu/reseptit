@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Recipes</title>
+</head>
+
+<body>
+  <h1>Recipes</h1>
+
+  <p>
+    {% if session.user_id %}
+    <a href="/logout">Log out</a>
+    {% else %}
+    <a href="/register">Create an account</a> |
+    <a href="/login">Log in</a>
+    {% endif %}
+  </p>
+
+
+
+  {% if session.user_id %}
+  {% endif %}
+</body>
+
+</html>
