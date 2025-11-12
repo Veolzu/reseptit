@@ -1,7 +1,7 @@
 import sqlite3
 from flask import Flask
-from flask import abort, make_response, redirect, render_template, request, session
-import config, users
+from flask import abort, make_response, redirect, render_template, request, session, flash
+import config, users, recipe_book
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -22,8 +22,8 @@ def register():
 
         try:
             users.create_user(username, password1)
-            return redirect("/")
-            
+            flash("Tunnuksen luominen onnistui, voit nyt kirjautua sisään")
+            return redirect("/")            
         except sqlite3.IntegrityError:
             return "VIRHE: tunnus on jo varattu"
 
@@ -47,8 +47,19 @@ def logout():
     del session["user_id"]
     return redirect("/")
 
+@app.route("/new_recipe", methods=["POST"])
+def new_thread():
+    title = request.form["title"]
+    content = request.form["content"]
+    user_id = session["user_id"]
+
+    thread_id = recipe_book.add_recipe(title, content, user_id)
+    return redirect("/thread/" + str(thread_id))
+
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    recipes = recipe_book.get_recipes()
+    print(recipes)
+    return render_template("index.html", recipes=recipes)
 

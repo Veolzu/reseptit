@@ -17,9 +17,30 @@
     {% endif %}
   </p>
 
-
+  <hr />
+  {% for recipe in recipes %}
+  <p>
+    <a href="/recipe/{{ recipe.id }}">{{ recipe.title }}</a>
+    <br />
+    made by: {{ recipe.username }}, average rating: TBD
+  </p>
+  <hr />
+  {% endfor %}
 
   {% if session.user_id %}
+  <h2>A new recipe</h2>
+
+  <form action="/new_recipe" method="post">
+    <p>
+      Title: <br />
+      <input type="text" name="title" />
+    </p>
+    <p>
+      Viesti: <br />
+      <textarea name="content" rows="5" cols="40"></textarea>
+    </p>
+    <input type="submit" value="Lähetä" />
+  </form>
   {% endif %}
 </body>
 
