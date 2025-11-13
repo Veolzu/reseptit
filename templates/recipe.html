@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ recipe.title }}</title>
+</head>
+    <h1>{{ recipe.title }} </h1>
+    </p>
+        made by {{ recipe.username }}
+    <p>
+    <hr />
+    <p>{{recipe.content}}</p>
+    <hr />
+
+  <h2> Arvostelut</h2>
+
+  {% for review in ratings %}
+  <p>
+    {{ review.username }}: {{ review.rating}}/10
+  </p>
+  <p>
+    {{ review.content }}
+  </p>
+
+  <hr />
+  {% endfor %}
+
+  {% if session.user_id %}
+
+  <h2>Leave a review</h2>
+
+  <form action="/new_rating" method="post">
+    <p>
+      Review:<br />
+      <textarea name="content" rows="5" cols="40"></textarea>
+    </p>
+    <p>Review the recipe 1-10 (10 being the best):</p>
+
+    <select name = "dropdown">
+
+    <option value = "1">1</option>
+
+    <option value = "2">2</option>
+
+    <option value = "3">3</option>
+
+    <option value = "4">4</option>
+
+    <option value = "5">5</option>
+
+    <option value = "6">6</option>
+
+    <option value = "7">7</option>
+
+    <option value = "8">8</option>
+
+    <option value = "9">9</option>
+
+    <option value = "10">10</option>
+    </select>
+    <input type="hidden" name="recipe_id" value="{{ recipe.id }}" />
+    <input type="submit" value="Lähetä" />
+  </form>
+  <hr />
+  {% endif %}
+
+
+    <p>
+    <a href="/">Etusivulle</a>
+    </p>

@@ -48,18 +48,35 @@ def logout():
     return redirect("/")
 
 @app.route("/new_recipe", methods=["POST"])
-def new_thread():
+def new_recipe():
     title = request.form["title"]
     content = request.form["content"]
     user_id = session["user_id"]
+    print(title, content, user_id)
+    recipe_id = recipe_book.add_recipe(title, content, user_id)
+    return redirect("/recipe/" + str(recipe_id))
 
-    thread_id = recipe_book.add_recipe(title, content, user_id)
-    return redirect("/thread/" + str(thread_id))
+@app.route("/new_rating", methods=["POST"])
+def new_rating():
+    content = request.form["content"]
+    user_id = session["user_id"]
+    recipe_id = request.form["recipe_id"]
+    rating = request.form["dropdown"]
+    recipe_book.add_rating(content, rating,  user_id, recipe_id)
+    return redirect("/recipe/" + str(recipe_id))
+
+@app.route("/recipe/<int:recipe_id>")
+def show_recipe(recipe_id):
+    recipe = recipe_book.get_recipe(recipe_id)
+    ratings = recipe_book.get_ratings(recipe_id)
+    return render_template("recipe.html", recipe=recipe, ratings=ratings)
+
+
+
 
 
 @app.route("/")
 def index():
     recipes = recipe_book.get_recipes()
-    print(recipes)
     return render_template("index.html", recipes=recipes)
 

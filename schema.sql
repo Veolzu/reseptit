@@ -14,8 +14,7 @@ CREATE TABLE recipes (
 CREATE TABLE ratings (
     id INTEGER PRIMARY KEY,
     content TEXT,
-    sent_at TEXT,
-    rating TEXT,
+    rating INTEGER,
     user_id INTEGER REFERENCES users,
     recipe_id INTEGER REFERENCES recipes
 );
