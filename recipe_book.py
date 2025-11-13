@@ -49,9 +49,9 @@ def get_rating(rating_id):
 def average_rating(recipe_id):
     ratings = get_ratings(recipe_id)
 
-def update_recipe(message_id, content):
-    sql = "UPDATE recipes SET content = ? WHERE id = ?"
-    db.execute(sql, [content, message_id])
+def update_recipe(message_id, title, content):
+    sql = "UPDATE recipes SET content = ?, title = ? WHERE id = ?"
+    db.execute(sql, [content, title, message_id])
 
 def update_rating(rating_id, content, rating):
     sql = "UPDATE ratings SET content = ?, rating = ? WHERE id = ?"

@@ -81,7 +81,8 @@ def edit_recipe(recipe_id):
 
     if request.method == "POST":
         content = request.form["content"]
-        recipe_book.update_recipe(recipe["id"], content)
+        title = request.form["title"]
+        recipe_book.update_recipe(recipe["id"], title, content)
         return redirect("/recipe/" + str(recipe_id))
     
 @app.route("/remove_recipe/<int:recipe_id>", methods=["GET"])

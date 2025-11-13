@@ -2,13 +2,16 @@
 <html>
 
 <head>
-  <title>Viestin muokkaus</title>
+  <title>Editing</title>
 </head>
 
 <body>
-  <h1>Viestin muokkaus</h1>
+  <h1>Editing the recipe</h1>
   <form action="/edit_recipe/{{ recipe.id }}" method="post">
     <p>
+      Title: <br />
+      <textarea name="title" rows="1" cols="20">{{ recipe.title }}</textarea>
+      <br />
       Recipe:<br />
       <textarea name="content" rows="5" cols="40">{{ recipe.content }}</textarea>
     </p>
