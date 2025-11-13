@@ -17,6 +17,10 @@
   {% for review in ratings %}
   <p>
     {{ review.username }}: {{ review.rating}}/10
+    {% if session.user_id == recipe.user_id %}
+    | <a href="/edit_rating/{{ rating.id }}">Edit</a>
+    | <a href="/remove_rating/{{ rating.id }}">Delete</a>
+    {% endif %}
   </p>
   <p>
     {{ review.content }}

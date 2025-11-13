@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Viestin muokkaus</title>
+</head>
+
+<body>
+  <h1>Viestin muokkaus</h1>
+  <form action="/edit_recipe/{{ recipe.id }}" method="post">
+    <p>
+      Recipe:<br />
+      <textarea name="content" rows="5" cols="40">{{ recipe.content }}</textarea>
+    </p>
+    <input type="submit" value="Lähetä" />
+  </form>
+</body>
+
+</html>

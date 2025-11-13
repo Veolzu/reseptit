@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Remove a recipe</title>
+</head>
+
+<body>
+  <h1>Remove a recipe</h1>
+  <form action="/remove_recipe/{{ recipe.id }}" method="post">
+    <p>
+      Are you sure you want to remove the recipe "{{ recipe.title }}"?
+    </p>
+    <input type="submit" name="continue" value="Continue" />
+    <input type="submit" name="cancel" value="Back" />
+  </form>
+</body>
+
+</html>

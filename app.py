@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import abort, make_response, redirect, render_template, request, session, flash
+from flask import redirect, render_template, request, session, flash
 import config, users, recipe_book
 
 app = Flask(__name__)
@@ -72,7 +72,29 @@ def show_recipe(recipe_id):
     return render_template("recipe.html", recipe=recipe, ratings=ratings)
 
 
+@app.route("/edit_recipe/<int:recipe_id>", methods=["GET", "POST"])
+def edit_recipe(recipe_id):
+    recipe = recipe_book.get_recipe(recipe_id)
 
+    if request.method == "GET":
+        return render_template("edit_recipe.html", recipe=recipe)
+
+    if request.method == "POST":
+        content = request.form["content"]
+        recipe_book.update_recipe(recipe["id"], content)
+        return redirect("/recipe/" + str(recipe_id))
+    
+@app.route("/remove_recipe/<int:recipe_id>", methods=["GET", "POST"])
+def remove_recipe(recipe_id):
+    recipe = recipe_book.get_recipe(recipe_id)
+
+    if request.method == "GET":
+        return render_template("remove_recipe.html", recipe=recipe)
+
+    if request.method == "POST":
+        if "continue" in request.form:
+            recipe_book.remove_recipe(recipe["id"])
+        return redirect("/")
 
 
 @app.route("/")

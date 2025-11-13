@@ -23,6 +23,10 @@
     <a href="/recipe/{{ recipe.id }}">{{ recipe.title }}</a>
     <br />
     made by: {{ recipe.username }}, average rating: TBD
+    {% if session.user_id == recipe.user_id %}
+    | <a href="/edit_recipe/{{ recipe.id }}">Edit</a>
+    | <a href="/remove_recipe/{{ recipe.id }}">Delete</a>
+    {% endif %}
   </p>
   <hr />
   {% endfor %}
