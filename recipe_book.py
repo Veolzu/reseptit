@@ -32,15 +32,22 @@ def get_recipe(recipe_id):
     return result[0]
 
 def get_ratings(recipe_id):
-    sql = """SELECT r.content, r.rating, r.user_id, r.recipe_id, u.username
+    sql = """SELECT r.id, r.content, r.rating, r.user_id, r.recipe_id, u.username
              FROM ratings r, users u
              WHERE u.id = r.user_id AND r.recipe_id= ?"""
     return db.query(sql, [recipe_id])
 
+def get_rating(rating_id):
+    sql = """SELECT r.id, r.content, r.rating, r.recipe_id
+             FROM ratings r
+             WHERE r.id= ?"""
+    result = db.query(sql, [rating_id])
+    if len(result) == 0:
+        return None
+    return result[0]
+
 def average_rating(recipe_id):
     ratings = get_ratings(recipe_id)
-
-
 
 def update_recipe(message_id, content):
     sql = "UPDATE recipes SET content = ? WHERE id = ?"

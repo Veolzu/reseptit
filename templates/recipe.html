@@ -5,6 +5,10 @@
     <title>{{ recipe.title }}</title>
 </head>
     <h1>{{ recipe.title }} </h1>
+    {% if session.user_id == recipe.user_id %}
+    | <a href="/edit_recipe/{{ recipe.id }}">Edit</a>
+    | <a href="/remove_recipe/{{ recipe.id }}">Delete</a>
+    {% endif %}
     </p>
         made by {{ recipe.username }}
     <p>
@@ -12,14 +16,14 @@
     <p>{{recipe.content}}</p>
     <hr />
 
-  <h2> Arvostelut</h2>
+  <h2> Reviews</h2>
 
   {% for review in ratings %}
   <p>
     {{ review.username }}: {{ review.rating}}/10
-    {% if session.user_id == recipe.user_id %}
-    | <a href="/edit_rating/{{ rating.id }}">Edit</a>
-    | <a href="/remove_rating/{{ rating.id }}">Delete</a>
+    {% if session.user_id == review.user_id %}
+    | <a href="/edit_rating/{{ review.id }}">Edit</a>
+    | <a href="/remove_rating/{{ review.id }}">Delete</a>
     {% endif %}
   </p>
   <p>

@@ -84,7 +84,7 @@ def edit_recipe(recipe_id):
         recipe_book.update_recipe(recipe["id"], content)
         return redirect("/recipe/" + str(recipe_id))
     
-@app.route("/remove_recipe/<int:recipe_id>", methods=["GET", "POST"])
+@app.route("/remove_recipe/<int:recipe_id>", methods=["GET"])
 def remove_recipe(recipe_id):
     recipe = recipe_book.get_recipe(recipe_id)
 
@@ -95,6 +95,35 @@ def remove_recipe(recipe_id):
         if "continue" in request.form:
             recipe_book.remove_recipe(recipe["id"])
         return redirect("/")
+    
+
+
+@app.route("/edit_rating/<int:rating_id>", methods=["GET", "POST"])
+def edit_rating(rating_id):
+    rating = recipe_book.get_rating(rating_id)
+    print("stuff")
+    if request.method == "GET":
+        print(rating["id"])
+        return render_template("edit_rating.html", rating=rating)
+
+    if request.method == "POST":
+        print("Editing rating...")
+        content = request.form["content"]
+        rating_num = request.form["dropdown"]
+        recipe_book.update_rating(rating_id, content, rating_num)
+        return redirect("/recipe/" + str(rating["recipe_id"]))
+    
+@app.route("/remove_rating/<int:rating_id>", methods=["GET", "POST"])
+def remove_rating(rating_id):
+    rating = recipe_book.get_rating(rating_id)
+
+    if request.method == "GET":
+        return render_template("remove_rating.html", rating=rating)
+
+    if request.method == "POST":
+        if "continue" in request.form:
+            recipe_book.remove_rating(rating["id"])
+        return redirect("/recipe/" + str(rating["recipe_id"]))
 
 
 @app.route("/")
