@@ -1,15 +1,15 @@
 DELETE FROM classes;
 
-INSERT INTO classes (title) VALUES ('alkuruoka');
-INSERT INTO classes (title) VALUES ('pääruoka');
-INSERT INTO classes (title) VALUES ('jälkiruoka');
+INSERT INTO classes (title) VALUES ('appetizer');
+INSERT INTO classes (title) VALUES ('entree');
+INSERT INTO classes (title) VALUES ('dessert');
 
-INSERT INTO classes (title) VALUES ('vegaani');
-INSERT INTO classes (title) VALUES ('liharuoka');
+INSERT INTO classes (title) VALUES ('vegan');
+INSERT INTO classes (title) VALUES ('meat');
 
 
-INSERT INTO classes (title) VALUES ('meksikolaista');
-INSERT INTO classes (title) VALUES ('kiinalaista');
+INSERT INTO classes (title) VALUES ('mexican');
+INSERT INTO classes (title) VALUES ('chinese');
 
 
 

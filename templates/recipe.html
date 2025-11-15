@@ -22,7 +22,7 @@
     <ul>
     {% for class in classes %}
     <li>
-      {{ class.title }}
+    | <a href="/search?query=&{{class.title}}={{class.title}}">{{ class.title }}</a>      
     </li>
     {%endfor%}
    </ul>

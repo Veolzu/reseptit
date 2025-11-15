@@ -95,13 +95,33 @@ def remove_rating(rating_id):
     set_average_rating(rating["recipe_id"])
 
 
-def search(query):
-    sql = """SELECT r.id, r.user_id, r.title, r.content, u.username, u.id, u.username, r.avg_rating
+def search(query, classes):
+    if query == "":
+        sql ="""SELECT r.id, r.user_id, r.title, r.content, u.username, r.avg_rating
             FROM recipes r, users u
-            WHERE (r.user_id = u.id AND r.content like ?) OR (r.user_id = u.id AND r.title like ?)
+            WHERE (r.user_id = u.id)
             """
-    like = "%" + query + "%"
-    return db.query(sql, [like, like])
+        results = db.query(sql)
+    else:
+        sql = """SELECT r.id, r.user_id, r.title, r.content, u.username, r.avg_rating
+                FROM recipes r, users u
+                WHERE (r.user_id = u.id AND r.content like ?) OR (r.user_id = u.id AND r.title like ?)
+                """
+        like = "%" + query + "%"
+        results = db.query(sql, [like, like])
+    true_results = []
+    for result in results:
+        in_criterion = True
+        result_classes = get_classes_of_recipe(result["id"])
+        for searched_classes in classes:
+            titles = [elem["title"] for elem in result_classes]
+            if searched_classes not in titles:
+                in_criterion = False
+        print(in_criterion)
+        if in_criterion:
+            true_results.append(result)
+    print(true_results)
+    return true_results
 
 
 def get_all_classes():
