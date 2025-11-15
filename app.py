@@ -102,13 +102,10 @@ def remove_recipe(recipe_id):
 @app.route("/edit_rating/<int:rating_id>", methods=["GET", "POST"])
 def edit_rating(rating_id):
     rating = recipe_book.get_rating(rating_id)
-    print("stuff")
     if request.method == "GET":
-        print(rating["id"])
         return render_template("edit_rating.html", rating=rating)
 
     if request.method == "POST":
-        print("Editing rating...")
         content = request.form["content"]
         rating_num = request.form["dropdown"]
         recipe_book.update_rating(rating_id, content, rating_num)
@@ -127,8 +124,16 @@ def remove_rating(rating_id):
         return redirect("/recipe/" + str(rating["recipe_id"]))
 
 
+@app.route("/search")
+def search():
+    query = request.args.get("query")
+    results = recipe_book.search(query) if query else []
+    return render_template("search.html", query=query, results=results)
+
+
 @app.route("/")
 def index():
     recipes = recipe_book.get_recipes()
     return render_template("index.html", recipes=recipes)
+
 

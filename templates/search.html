@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Search</title>
+</head>
+
+<body>
+  <h1>Search</h1>
+
+  <form action="/search" method="get">
+    <p>
+      Query:
+      {% if query %}
+      <input type="text" name="query" value="{{ query }}" />
+      {% else %}
+      <input type="text" name="query" />
+      {% endif %}
+    </p>
+    <input type="submit" value="Hae" />
+  </form>
+
+  {% if query %}
+  <hr />
+  <h2>Results</h2>
+  
+  <ul>
+  {% for result in results %}
+    <li>
+      <a href="/recipe/{{ result.id }}">
+        {{ result.title }}
+      </a>
+      <br />
+      {{ result.username }},
+    {% if result.avg_rating is not none %}
+        average rating: {{ result.avg_rating }}
+    {% else %}
+        has not been reviewed yet
+    {% endif %}
+    </li>
+  {% endfor %}
+  </ul>
+  {% endif %}
+</body>

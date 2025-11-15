@@ -9,6 +9,7 @@
   <h1>Recipes</h1>
 
   <p>
+    <a href="/search">Haku</a> |
     {% if session.user_id %}
     <a href="/logout">Log out</a>
     {% else %}
@@ -16,13 +17,17 @@
     <a href="/login">Log in</a>
     {% endif %}
   </p>
-
   <hr />
   {% for recipe in recipes %}
   <p>
     <a href="/recipe/{{ recipe.id }}">{{ recipe.title }}</a>
     <br />
-    made by: {{ recipe.username }}, average rating: TBD
+    made by: {{ recipe.username }}, 
+    {% if recipe.avg_rating is not none %}
+      average rating: {{ recipe.avg_rating }}
+    {% else %}
+      has not been reviewed yet
+    {% endif %}
     {% if session.user_id == recipe.user_id %}
     | <a href="/edit_recipe/{{ recipe.id }}">Edit</a>
     | <a href="/remove_recipe/{{ recipe.id }}">Delete</a>
