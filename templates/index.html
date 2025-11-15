@@ -48,6 +48,10 @@
       Recipe: <br />
       <textarea name="content" rows="5" cols="40"></textarea>
     </p>
+      {% for class in classes%}
+        <input type="checkbox" name={{class.title}} value={{class.title}}>
+        <label for={{class.title}}>{{class.title }}</label><br>
+      {% endfor %}
     <input type="submit" value="Lähetä" />
   </form>
   {% endif %}

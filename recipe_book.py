@@ -16,6 +16,7 @@ def get_recipes_by_user(user_id):
     result = db.query(sql, [user_id])
     print(result)
     return result
+
 def add_recipe(title, content, user_id):
     sql = "INSERT INTO recipes (title, content, user_id) VALUES (?, ?, ?)"
     db.execute(sql, [title, content, user_id])
@@ -79,6 +80,10 @@ def remove_recipe(recipe_id):
     sql = """DELETE FROM ratings
              WHERE recipe_id = ?"""
     db.execute(sql, [recipe_id])
+
+    sql = "DELETE FROM recipe_classes WHERE recipe_id = ?"
+    db.execute(sql, [recipe_id])
+    
     sql = "DELETE FROM recipes WHERE id = ?"
     db.execute(sql, [recipe_id])
 
@@ -94,5 +99,18 @@ def search(query):
             FROM recipes r, users u
             WHERE (r.user_id = u.id AND r.content like ?) OR (r.user_id = u.id AND r.title like ?)
             """
-    return db.query(sql, ["%" + query + "%", "%" + query + "%"])
+    like = "%" + query + "%"
+    return db.query(sql, [like, like])
 
+
+def get_all_classes():
+    sql = "SELECT title FROM classes"
+    return db.query(sql)
+
+def get_classes_of_recipe(recipe_id):
+    sql = "SELECT title FROM recipe_classes WHERE recipe_id = ?"
+    return db.query(sql, [recipe_id])
+
+def add_recipe_class(recipe_id, new_class):
+    sql = "INSERT INTO recipe_classes (recipe_id, title) VALUES (?, ?)"
+    db.execute(sql, [recipe_id, new_class])

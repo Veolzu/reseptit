@@ -18,6 +18,15 @@
       {% endif %}
     <p>
     <hr />
+    <h3>Classifications</h3>
+    <ul>
+    {% for class in classes %}
+    <li>
+      {{ class.title }}
+    </li>
+    {%endfor%}
+   </ul>
+   <hr />
     <p>{{recipe.content}}</p>
     <hr />
 

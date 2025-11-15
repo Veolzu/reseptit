@@ -52,8 +52,19 @@ def new_recipe():
     title = request.form["title"]
     content = request.form["content"]
     user_id = session["user_id"]
-    print(title, content, user_id)
     recipe_id = recipe_book.add_recipe(title, content, user_id)
+
+    all_classes = recipe_book.get_all_classes()
+    classes = []
+    for elem in all_classes:
+        try:
+            classes.append(request.form[elem["title"]])
+        except KeyError:
+            continue
+
+    for title in classes:
+        recipe_book.add_recipe_class(recipe_id, title)
+
     return redirect("/recipe/" + str(recipe_id))
 
 @app.route("/new_rating", methods=["POST"])
@@ -69,26 +80,39 @@ def new_rating():
 def show_recipe(recipe_id):
     recipe = recipe_book.get_recipe(recipe_id)
     ratings = recipe_book.get_ratings(recipe_id)
-    return render_template("recipe.html", recipe=recipe, ratings=ratings)
+    classes = recipe_book.get_classes_of_recipe(recipe_id)
+    return render_template("recipe.html", recipe=recipe, ratings=ratings, classes=classes)
 
 
 @app.route("/edit_recipe/<int:recipe_id>", methods=["GET", "POST"])
 def edit_recipe(recipe_id):
     recipe = recipe_book.get_recipe(recipe_id)
-
+    all_classes = recipe_book.get_all_classes()
+    if recipe["user_id"] != session["user_id"]:
+        abort(403)
     if request.method == "GET":
-        return render_template("edit_recipe.html", recipe=recipe)
+        return render_template("edit_recipe.html", recipe=recipe, classes=all_classes)
 
     if request.method == "POST":
         content = request.form["content"]
         title = request.form["title"]
         recipe_book.update_recipe(recipe["id"], title, content)
+        classes = []
+        for elem in all_classes:
+            try:
+                classes.append(request.form[elem["title"]])
+            except KeyError:
+                continue
+
+        for title in classes:
+            recipe_book.add_recipe_class(recipe_id, title)
         return redirect("/recipe/" + str(recipe_id))
     
-@app.route("/remove_recipe/<int:recipe_id>", methods=["GET"])
+@app.route("/remove_recipe/<int:recipe_id>", methods=["GET", "POST"])
 def remove_recipe(recipe_id):
     recipe = recipe_book.get_recipe(recipe_id)
-
+    if recipe["user_id"] != session["user_id"]:
+        abort(403)
     if request.method == "GET":
         return render_template("remove_recipe.html", recipe=recipe)
 
@@ -102,6 +126,8 @@ def remove_recipe(recipe_id):
 @app.route("/edit_rating/<int:rating_id>", methods=["GET", "POST"])
 def edit_rating(rating_id):
     rating = recipe_book.get_rating(rating_id)
+    if rating["user_id"] != session["user_id"]:
+        abort(403)
     if request.method == "GET":
         return render_template("edit_rating.html", rating=rating)
 
@@ -114,7 +140,8 @@ def edit_rating(rating_id):
 @app.route("/remove_rating/<int:rating_id>", methods=["GET", "POST"])
 def remove_rating(rating_id):
     rating = recipe_book.get_rating(rating_id)
-
+    if rating["user_id"] != session["user_id"]:
+        abort(403)
     if request.method == "GET":
         return render_template("remove_rating.html", rating=rating)
 
@@ -137,9 +164,7 @@ def show_user(user_id):
     user = users.get_user(user_id)
     if not user:
         abort(404)
-    print(user, user_id)
     recipes = recipe_book.get_recipes_by_user(user_id)
-    print(recipes)
     return render_template("user.html", user=user, recipes=recipes)
 
 @app.route("/add_image", methods=["GET", "POST"])
@@ -176,4 +201,6 @@ def show_image(user_id):
 @app.route("/")
 def index():
     recipes = recipe_book.get_recipes()
-    return render_template("index.html", recipes=recipes)
+    classes = recipe_book.get_all_classes()
+
+    return render_template("index.html", recipes=recipes, classes=classes)
