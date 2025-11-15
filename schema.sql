@@ -8,7 +8,8 @@ CREATE TABLE recipes (
     id INTEGER PRIMARY KEY,
     title TEXT,
     content TEXT, 
-    user_id INTEGER REFERENCES users
+    user_id INTEGER REFERENCES users,
+    avg_rating REAL
 );
 
 CREATE TABLE ratings (
