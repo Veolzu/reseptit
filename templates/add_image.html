@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Upload a profile picture</title>
+</head>
+
+<body>
+  <h1>Upload a profile picture</h1>
+
+  <p>
+    Upload a jpg file, max size is 100 kB
+  </p>
+
+  <form action="/add_image" method="post" enctype="multipart/form-data">
+    <p>
+      Picture: <input type="file" name="image" accept=".jpg" />
+    </p>
+    <input type="submit" value="Lähetä" />
+  </form>
+</body>
+
+</html>

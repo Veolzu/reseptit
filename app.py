@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, abort, render_template, request, session, flash
+from flask import redirect, abort, render_template, request, session, flash, make_response
 import config, users, recipe_book
 
 app = Flask(__name__)
@@ -131,11 +131,6 @@ def search():
     return render_template("search.html", query=query, results=results)
 
 
-@app.route("/")
-def index():
-    recipes = recipe_book.get_recipes()
-    return render_template("index.html", recipes=recipes)
-
 
 @app.route("/user/<int:user_id>")
 def show_user(user_id):
@@ -146,3 +141,39 @@ def show_user(user_id):
     recipes = recipe_book.get_recipes_by_user(user_id)
     print(recipes)
     return render_template("user.html", user=user, recipes=recipes)
+
+@app.route("/add_image", methods=["GET", "POST"])
+def add_image():
+
+    if request.method == "GET":
+        return render_template("add_image.html")
+
+    if request.method == "POST":
+        file = request.files["image"]
+        if not file.filename.endswith(".jpg"):
+            return "VIRHE: väärä tiedostomuoto"
+
+        image = file.read()
+        if len(image) > 100 * 1024:
+            return "VIRHE: liian suuri kuva"
+
+        user_id = session["user_id"]
+        users.update_image(user_id, image)
+        return redirect("/user/" + str(user_id))
+
+@app.route("/image/<int:user_id>")
+def show_image(user_id):
+    image = users.get_image(user_id)
+    if not image:
+        abort(404)
+
+    response = make_response(bytes(image))
+    response.headers.set("Content-Type", "image/jpeg")
+    return response
+
+
+
+@app.route("/")
+def index():
+    recipes = recipe_book.get_recipes()
+    return render_template("index.html", recipes=recipes)
