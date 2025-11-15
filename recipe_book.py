@@ -65,10 +65,11 @@ def set_average_rating(recipe_id):
     db.execute(sql, [average, recipe_id])
 
     
-def update_recipe(message_id, title, content):
+def update_recipe(recipe_id, title, content):
     sql = "UPDATE recipes SET content = ?, title = ? WHERE id = ?"
-    db.execute(sql, [content, title, message_id])
-
+    db.execute(sql, [content, title, recipe_id])
+    sql = "DELETE FROM recipe_classes WHERE recipe_id = ?"
+    db.execute(sql, [recipe_id])
 def update_rating(rating_id, content, rating):
     sql = "UPDATE ratings SET content = ?, rating = ? WHERE id = ?"
     db.execute(sql, [content, rating, rating_id])
