@@ -22,7 +22,7 @@
   <p>
     <a href="/recipe/{{ recipe.id }}">{{ recipe.title }}</a>
     <br />
-    made by: {{ recipe.username }}, 
+      made by <a href="/user/{{ recipe.user_id }}">{{ recipe.username }}</a>,
     {% if recipe.avg_rating is not none %}
       average rating: {{ recipe.avg_rating }}
     {% else %}

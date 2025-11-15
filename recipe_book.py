@@ -8,7 +8,14 @@ def get_recipes():
              ORDER BY t.id DESC"""
     return db.query(sql)
 
-
+def get_recipes_by_user(user_id):
+    sql = """SELECT id, title, user_id, avg_rating
+             FROM recipes
+             WHERE user_id = ?"""
+    print(user_id)
+    result = db.query(sql, [user_id])
+    print(result)
+    return result
 def add_recipe(title, content, user_id):
     sql = "INSERT INTO recipes (title, content, user_id) VALUES (?, ?, ?)"
     db.execute(sql, [title, content, user_id])
@@ -48,7 +55,6 @@ def get_rating(rating_id):
     return result[0]
 
 def set_average_rating(recipe_id):
-    print("stuff getting done")
     ratings = get_ratings(recipe_id)
     sum = 0
     for review in ratings:

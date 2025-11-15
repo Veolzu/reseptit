@@ -31,7 +31,7 @@
         {{ result.title }}
       </a>
       <br />
-      {{ result.username }},
+            made by <a href="/user/{{ result.user_id }}">{{ result.username }}</a>,
     {% if result.avg_rating is not none %}
         average rating: {{ result.avg_rating }}
     {% else %}

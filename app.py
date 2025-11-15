@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session, flash
+from flask import redirect, abort, render_template, request, session, flash
 import config, users, recipe_book
 
 app = Flask(__name__)
@@ -137,3 +137,12 @@ def index():
     return render_template("index.html", recipes=recipes)
 
 
+@app.route("/user/<int:user_id>")
+def show_user(user_id):
+    user = users.get_user(user_id)
+    if not user:
+        abort(404)
+    print(user, user_id)
+    recipes = recipe_book.get_recipes_by_user(user_id)
+    print(recipes)
+    return render_template("user.html", user=user, recipes=recipes)

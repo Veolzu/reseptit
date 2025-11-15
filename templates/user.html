@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>User {{ user.username }}</title>
+</head>
+
+<body>
+  <h1>User {{ user.username }}</h1>
+
+  {% if user.has_image %}
+  <img src="/image/{{ user.id }}">
+  {% endif %}
+
+  {% if user.id == session.user_id %}
+  <p>
+    <a href="/add_image">Lisää profiilikuva</a>
+  </p>
+  {% endif %}
+  <p>
+    {% if recipes is not none %}
+    User has created {{ recipes | count }} different recipes
+    {% else %}
+    User has not yet published a recipe
+    {%endif%}
+
+  </p>
+
+  <h2>Recipes</h2>
+
+  <ul>
+  {% for recipe in recipes %}
+    <li>
+      <a href="/recipe/{{ recipe.id }}">
+        {{ recipe.title }}
+      </a>
+      {% if recipe.avg_rating is not none %}
+        average rating: {{ recipe.avg_rating }}
+      {% else %}
+        has not been reviewed yet
+      {% endif %}
+      <br />
+    </li>  
+  {% endfor %}
+  </ul>
+</body>
+
+</html>
