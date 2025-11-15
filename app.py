@@ -7,6 +7,11 @@ app = Flask(__name__)
 app.secret_key = config.secret_key
 
 
+def require_login():
+    if "user_id" not in session:
+        abort(403)
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
@@ -49,11 +54,16 @@ def logout():
 
 @app.route("/new_recipe", methods=["POST"])
 def new_recipe():
+    require_login()
     title = request.form["title"]
     content = request.form["content"]
     user_id = session["user_id"]
-    recipe_id = recipe_book.add_recipe(title, content, user_id)
-
+    if not title or not content or len(title) > 100 or len(content) > 5000:
+        abort(403)
+    try:
+        recipe_id = recipe_book.add_recipe(title, content, user_id)
+    except sqlite3.IntegrityError:
+        abort(403)
     all_classes = recipe_book.get_all_classes()
     classes = []
     for elem in all_classes:
@@ -69,16 +79,24 @@ def new_recipe():
 
 @app.route("/new_rating", methods=["POST"])
 def new_rating():
+    require_login()
     content = request.form["content"]
     user_id = session["user_id"]
     recipe_id = request.form["recipe_id"]
     rating = request.form["dropdown"]
-    recipe_book.add_rating(content, rating,  user_id, recipe_id)
+    if not content or len(content) > 5000:
+        abort(403)
+    try:
+        recipe_book.add_rating(content, rating,  user_id, recipe_id)
+    except sqlite3.IntegrityError:
+        abort(403)
     return redirect("/recipe/" + str(recipe_id))
 
 @app.route("/recipe/<int:recipe_id>")
 def show_recipe(recipe_id):
     recipe = recipe_book.get_recipe(recipe_id)
+    if not recipe:
+        abort(404)
     ratings = recipe_book.get_ratings(recipe_id)
     classes = recipe_book.get_classes_of_recipe(recipe_id)
     return render_template("recipe.html", recipe=recipe, ratings=ratings, classes=classes)
@@ -86,16 +104,20 @@ def show_recipe(recipe_id):
 
 @app.route("/edit_recipe/<int:recipe_id>", methods=["GET", "POST"])
 def edit_recipe(recipe_id):
+    require_login()
     recipe = recipe_book.get_recipe(recipe_id)
     all_classes = recipe_book.get_all_classes()
     if recipe["user_id"] != session["user_id"]:
         abort(403)
+        
     if request.method == "GET":
         return render_template("edit_recipe.html", recipe=recipe, classes=all_classes)
 
     if request.method == "POST":
         content = request.form["content"]
         title = request.form["title"]
+        if not title or not content or len(title) > 100 or len(content) > 5000:
+            abort(403)
         recipe_book.update_recipe(recipe["id"], title, content)
         classes = []
         for elem in all_classes:
@@ -110,6 +132,7 @@ def edit_recipe(recipe_id):
     
 @app.route("/remove_recipe/<int:recipe_id>", methods=["GET", "POST"])
 def remove_recipe(recipe_id):
+    require_login()
     recipe = recipe_book.get_recipe(recipe_id)
     if recipe["user_id"] != session["user_id"]:
         abort(403)
@@ -125,6 +148,7 @@ def remove_recipe(recipe_id):
 
 @app.route("/edit_rating/<int:rating_id>", methods=["GET", "POST"])
 def edit_rating(rating_id):
+    require_login()
     rating = recipe_book.get_rating(rating_id)
     if rating["user_id"] != session["user_id"]:
         abort(403)
@@ -134,11 +158,14 @@ def edit_rating(rating_id):
     if request.method == "POST":
         content = request.form["content"]
         rating_num = request.form["dropdown"]
+        if not content or len(content) > 5000:
+            abort(403)
         recipe_book.update_rating(rating_id, content, rating_num)
         return redirect("/recipe/" + str(rating["recipe_id"]))
     
 @app.route("/remove_rating/<int:rating_id>", methods=["GET", "POST"])
 def remove_rating(rating_id):
+    require_login()
     rating = recipe_book.get_rating(rating_id)
     if rating["user_id"] != session["user_id"]:
         abort(403)
@@ -169,7 +196,7 @@ def show_user(user_id):
 
 @app.route("/add_image", methods=["GET", "POST"])
 def add_image():
-
+    require_login()
     if request.method == "GET":
         return render_template("add_image.html")
 

@@ -42,11 +42,11 @@
   <form action="/new_recipe" method="post">
     <p>
       Title: <br />
-      <input type="text" name="title" />
+      <input type="text" name="title" maxlength="100" required/>
     </p>
     <p>
       Recipe: <br />
-      <textarea name="content" rows="5" cols="40"></textarea>
+      <textarea name="content" rows="5" cols="40" maxlength="5000" required></textarea>
     </p>
       {% for class in classes%}
         <input type="checkbox" name={{class.title}} value={{class.title}}>
