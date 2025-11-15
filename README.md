@@ -20,9 +20,9 @@ Installation Guide:
   python3 -m venv venv
 
 3. Activate said virtual environment with the following command
-     For windows:
+     - For windows:
        \venv\Scripts\activate
-     For linux:
+     - For linux:
        source venv/bin/activate
 
 4. In the virtual environment install flask with the following command:
