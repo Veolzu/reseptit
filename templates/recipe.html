@@ -81,6 +81,7 @@
     <option value = "10">10</option>
     </select>
     <input type="hidden" name="recipe_id" value="{{ recipe.id }}" />
+    <input type="hidden" name="csrf_token" value={{session.csrf_token}} />
     <input type="submit" value="Lähetä" />
   </form>
   <hr />

@@ -36,6 +36,13 @@
   <hr />
   {% endfor %}
 
+  <p>
+    <a href="/{{ page - 1 }}">&lt;&lt;</a>
+    Sivu {{ page }}/{{ page_count }}
+    <a href="/{{ page + 1 }}">&gt;&gt;</a>
+  </p>
+  <hr />
+
   {% if session.user_id %}
   <h2>A new recipe</h2>
 
@@ -55,6 +62,8 @@
     <input type="submit" value="Lähetä" />
   </form>
   {% endif %}
+
+  
 
 </body>
 
