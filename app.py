@@ -23,7 +23,7 @@ def check_csrf(request):
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
-        return render_template("register.html")
+        return render_template("register.html", filled={})
 
     if request.method == "POST":
         username = request.form["username"]
@@ -41,7 +41,7 @@ def register():
             return render_template("register.html", filled=filled)
         try:
             users.create_user(username, password1)
-            flash("Tunnuksen luominen onnistui, voit nyt kirjautua sisään")
+            flash("Registration was succesful, you can now log in")
             return redirect("/login")            
         except sqlite3.IntegrityError:
             flash("Error: username is already taken")
@@ -51,21 +51,23 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return render_template("login.html", next_page=request.referrer)
+        return render_template("login.html", next_page=request.referrer, filled={})
 
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
         user_id = users.check_login(username, password)
+        next_page = request.form["next_page"]
         if user_id:
             session["user_id"] = user_id
             session["csrf_token"] = secrets.token_hex(16)
             session["username"] = username
             flash("login successful!")
-            return redirect("/")
+            return redirect(next_page)
         else:
+            filled = {"username": username}
             flash("Error: Incorrect username or password")
-            return render_template("login.html", next_page=request.referrer)
+            return render_template("login.html", next_page=request.referrer, filled=filled)
 @app.route("/logout")
 def logout():
     del session["user_id"]
@@ -242,7 +244,7 @@ def add_image():
 
         user_id = session["user_id"]
         users.update_image(user_id, image)
-        flash("Kuvan lisääminen onnistui")
+        flash("The upload was succesful!")
         return redirect("/user/" + str(user_id))
 
 @app.route("/image/<int:user_id>")

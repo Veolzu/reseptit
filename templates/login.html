@@ -2,19 +2,19 @@
 <html>
 
 <head>
-  <title>Kirjaudu sisään</title>
+  <title>Log in</title>
 </head>
 
 <body>
-  <h1>Kirjaudu sisään</h1>
+  <h1>Log in</h1>
 
   <form action="/login" method="post">
     <p>
-      Tunnus: <br />
-      <input type="text" name="username" />
+      Username: <br />
+      <input type="text" name="username" value="{{ filled.username }}" maxlength="16" />
     </p>
     <p>
-      Salasana: <br />
+      password: <br />
       <input type="password" name="password" />
     </p>
     <input type="submit" value="Kirjaudu" />

@@ -22,9 +22,7 @@ def get_recipes_by_user(user_id):
     sql = """SELECT id, title, user_id, avg_rating
              FROM recipes
              WHERE user_id = ?"""
-    print(user_id)
     result = db.query(sql, [user_id])
-    print(result)
     return result
 
 def add_recipe(title, content, user_id):

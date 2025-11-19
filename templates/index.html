@@ -11,7 +11,9 @@
   <p>
     <a href="/search">Search</a> |
     {% if session.user_id %}
-    <a href="/logout">Log out</a>
+    <a href="/logout">Log out</a> |
+    <a href="/user/{{ session.user_id }}">Profile page</a>
+
     {% else %}
     <a href="/register">Create an account</a> |
     <a href="/login">Log in</a>
