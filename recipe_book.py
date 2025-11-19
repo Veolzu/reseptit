@@ -1,12 +1,22 @@
 import db
+def get_recipe_count():
+    sql = "SELECT COUNT(id) as count FROM recipes"
+    result = db.query(sql)
+    return result[0]["count"]
 
-def get_recipes():
+
+
+def get_recipes(page, page_size):
     sql = """SELECT t.id, t.title, t.user_id, u.username, t.avg_rating
              FROM recipes t, users u
              WHERE u.id = t.user_id
              GROUP BY t.id
-             ORDER BY t.id DESC"""
-    return db.query(sql)
+             ORDER BY t.id DESC
+             LIMIT ? OFFSET ?"""
+    
+    limit = page_size
+    offset = page_size * (page - 1)
+    return db.query(sql, [limit, offset])
 
 def get_recipes_by_user(user_id):
     sql = """SELECT id, title, user_id, avg_rating
@@ -47,7 +57,7 @@ def get_ratings(recipe_id):
     return db.query(sql, [recipe_id])
 
 def get_rating(rating_id):
-    sql = """SELECT r.id, r.content, r.rating, r.recipe_id
+    sql = """SELECT r.id, r.content, r.rating, r.recipe_id, r.user_id
              FROM ratings r
              WHERE r.id= ?"""
     result = db.query(sql, [rating_id])
@@ -89,38 +99,51 @@ def remove_recipe(recipe_id):
     db.execute(sql, [recipe_id])
 
 def remove_rating(rating_id):
+    recipe_id = get_rating(rating_id)["recipe_id"]
     sql = "DELETE FROM ratings WHERE id = ?"
     db.execute(sql, [rating_id])
-    rating = get_rating(rating_id)
-    set_average_rating(rating["recipe_id"])
+    set_average_rating(recipe_id)
 
 
 def search(query, classes):
-    if query == "":
-        sql ="""SELECT r.id, r.user_id, r.title, r.content, u.username, r.avg_rating
-            FROM recipes r, users u
-            WHERE (r.user_id = u.id)
-            """
-        results = db.query(sql)
-    else:
-        sql = """SELECT r.id, r.user_id, r.title, r.content, u.username, r.avg_rating
-                FROM recipes r, users u
-                WHERE (r.user_id = u.id AND r.content like ?) OR (r.user_id = u.id AND r.title like ?)
-                """
-        like = "%" + query + "%"
-        results = db.query(sql, [like, like])
     true_results = []
-    for result in results:
-        in_criterion = True
-        result_classes = get_classes_of_recipe(result["id"])
-        for searched_classes in classes:
-            titles = [elem["title"] for elem in result_classes]
-            if searched_classes not in titles:
-                in_criterion = False
-        print(in_criterion)
-        if in_criterion:
-            true_results.append(result)
-    print(true_results)
+    results = {}
+    if query == "" and len(classes) > 0:
+        for tag in classes:
+            sql="""
+                SElECT c.recipe_id, c.title as class, r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
+                FROM recipe_classes c, recipes r, users u
+                WHERE c.recipe_id = r.id AND c.title like ? and r.user_id = u.id"""
+            promising = db.query(sql, [str(tag)])
+            for result in promising:
+                if result["recipe_id"] not in results:
+                    results[result["recipe_id"]] = 0
+                results[result["recipe_id"]] += 1
+            for result in promising:
+                if results[result["recipe_id"]] == len(classes):
+                    true_results.append(result)
+    if query != "" and classes == []:
+        like = "%" + query + "%"
+        sql="""
+            SElECT c.recipe_id, c.title as class, r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
+            FROM recipe_classes c, recipes r, users u
+            WHERE r.user_id = u.id AND (r.title LIKE ? OR r.content LIKE ?) AND c.recipe_id = r.id"""
+        true_results = db.query(sql, [like, like])
+    else:   
+        like = "%" + query + "%"
+        for tag in classes:
+            sql="""
+                SElECT c.recipe_id, c.title as class, r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
+                FROM recipe_classes c, recipes r, users u
+                WHERE (c.recipe_id = r.id AND c.title like ? AND r.user_id = u.id AND r.title LIKE ?) OR (c.recipe_id = r.id AND c.title like ? AND r.user_id = u.id AND r.content LIKE ?)"""
+            promising = db.query(sql, [str(tag), like, str(tag), like])
+            for result in promising:
+                if result["recipe_id"] not in results:
+                    results[result["recipe_id"]] = 0
+                results[result["recipe_id"]] += 1
+            for result in promising:
+                if results[result["recipe_id"]] == len(classes):
+                    true_results.append(result)
     return true_results
 
 

@@ -1,4 +1,8 @@
 import sqlite3
+import math
+import time
+import secrets
+from flask import g
 from flask import Flask
 from flask import redirect, abort, render_template, request, session, flash, make_response
 import config, users, recipe_book
@@ -9,6 +13,10 @@ app.secret_key = config.secret_key
 
 def require_login():
     if "user_id" not in session:
+        abort(403)
+
+def check_csrf(request):
+    if request.form["csrf_token"] != session["csrf_token"]:
         abort(403)
 
 
@@ -43,6 +51,7 @@ def login():
         user_id = users.check_login(username, password)
         if user_id:
             session["user_id"] = user_id
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         else:
             return "VIRHE: väärä tunnus tai salasana"
@@ -58,6 +67,8 @@ def new_recipe():
     title = request.form["title"]
     content = request.form["content"]
     user_id = session["user_id"]
+
+
     if not title or not content or len(title) > 100 or len(content) > 5000:
         abort(403)
     try:
@@ -84,6 +95,7 @@ def new_rating():
     user_id = session["user_id"]
     recipe_id = request.form["recipe_id"]
     rating = request.form["dropdown"]
+
     if not content or len(content) > 5000:
         abort(403)
     try:
@@ -189,7 +201,6 @@ def search():
         classes.append(checked_class)
     classes = [elem for elem in classes if elem]
     results = recipe_book.search(query, classes) if (query or classes) else []
-    print(classes)
     return render_template("search.html", query=query, results=results, all_classes=all_classes, classes=classes)
 
 
@@ -234,8 +245,28 @@ def show_image(user_id):
 
 
 @app.route("/")
-def index():
-    recipes = recipe_book.get_recipes()
+@app.route("/<int:page>")
+def index(page=1):
+    page_size = 10
+    thread_count =  recipe_book.get_recipe_count()
+    recipes = recipe_book.get_recipes(page, page_size)
     classes = recipe_book.get_all_classes()
+    page_count = math.ceil(thread_count / page_size)
+    page_count = max(page_count, 1)
 
-    return render_template("index.html", recipes=recipes, classes=classes)
+    if page < 1:
+        return redirect("/1")
+    if page > page_count:
+        return redirect("/" + str(page_count))
+    return render_template("index.html", recipes=recipes, classes=classes, page=page, page_count=page_count)
+
+
+@app.before_request
+def before_request():
+    g.start_time = time.time()
+
+@app.after_request
+def after_request(response):
+    elapsed_time = round(time.time() - g.start_time, 2)
+    print("elapsed time:", elapsed_time, "s")
+    return response
