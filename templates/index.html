@@ -70,7 +70,9 @@
         <input type="checkbox" name={{class.title}} value={{class.title}}>
         <label for={{class.title}}>{{class.title }}</label><br>
       {% endfor %}
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Lähetä" />
+  
   </form>
   {% endif %}
 

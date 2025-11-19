@@ -2,6 +2,7 @@ import sqlite3
 import math
 import time
 import secrets
+
 from flask import g
 from flask import Flask
 from flask import redirect, abort, render_template, request, session, flash, make_response
@@ -10,14 +11,19 @@ import config, users, recipe_book
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+def forbidden():
+    abort(403)
+
+def not_found():
+    abort(404)
 
 def require_login():
     if "user_id" not in session:
-        abort(403)
+        forbidden()
 
 def check_csrf(request):
     if request.form["csrf_token"] != session["csrf_token"]:
-        abort(403)
+        forbidden()
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -78,17 +84,18 @@ def logout():
 @app.route("/new_recipe", methods=["POST"])
 def new_recipe():
     require_login()
+    check_csrf(request)
     title = request.form["title"]
     content = request.form["content"]
     user_id = session["user_id"]
 
 
     if not title or not content or len(title) > 100 or len(content) > 5000:
-        abort(403)
+        forbidden()
     try:
         recipe_id = recipe_book.add_recipe(title, content, user_id)
     except sqlite3.IntegrityError:
-        abort(403)
+        forbidden()
     all_classes = recipe_book.get_all_classes()
     classes = []
     for elem in all_classes:
@@ -105,24 +112,25 @@ def new_recipe():
 @app.route("/new_rating", methods=["POST"])
 def new_rating():
     require_login()
+    check_csrf(request)
     content = request.form["content"]
     user_id = session["user_id"]
     recipe_id = request.form["recipe_id"]
     rating = request.form["dropdown"]
 
     if not content or len(content) > 5000:
-        abort(403)
+        forbidden()
     try:
         recipe_book.add_rating(content, rating,  user_id, recipe_id)
     except sqlite3.IntegrityError:
-        abort(403)
+        forbidden()
     return redirect("/recipe/" + str(recipe_id))
 
 @app.route("/recipe/<int:recipe_id>")
 def show_recipe(recipe_id):
     recipe = recipe_book.get_recipe(recipe_id)
     if not recipe:
-        abort(404)
+        not_found()
     ratings = recipe_book.get_ratings(recipe_id)
     classes = recipe_book.get_classes_of_recipe(recipe_id)
     return render_template("recipe.html", recipe=recipe, ratings=ratings, classes=classes)
@@ -134,16 +142,17 @@ def edit_recipe(recipe_id):
     recipe = recipe_book.get_recipe(recipe_id)
     all_classes = recipe_book.get_all_classes()
     if recipe["user_id"] != session["user_id"]:
-        abort(403)
+        forbidden()
         
     if request.method == "GET":
         return render_template("edit_recipe.html", recipe=recipe, classes=all_classes)
 
     if request.method == "POST":
+        check_csrf(request)
         content = request.form["content"]
         title = request.form["title"]
         if not title or not content or len(title) > 100 or len(content) > 5000:
-            abort(403)
+            forbidden()
         recipe_book.update_recipe(recipe["id"], title, content)
         classes = []
         for elem in all_classes:
@@ -161,11 +170,12 @@ def remove_recipe(recipe_id):
     require_login()
     recipe = recipe_book.get_recipe(recipe_id)
     if recipe["user_id"] != session["user_id"]:
-        abort(403)
+        forbidden()
     if request.method == "GET":
         return render_template("remove_recipe.html", recipe=recipe)
 
     if request.method == "POST":
+        check_csrf(request)
         if "continue" in request.form:
             recipe_book.remove_recipe(recipe["id"])
         return redirect("/")
@@ -177,15 +187,16 @@ def edit_rating(rating_id):
     require_login()
     rating = recipe_book.get_rating(rating_id)
     if rating["user_id"] != session["user_id"]:
-        abort(403)
+        forbidden()
     if request.method == "GET":
         return render_template("edit_rating.html", rating=rating)
 
     if request.method == "POST":
+        check_csrf(request)
         content = request.form["content"]
         rating_num = request.form["dropdown"]
         if not content or len(content) > 5000:
-            abort(403)
+            forbidden()
         recipe_book.update_rating(rating_id, content, rating_num)
         return redirect("/recipe/" + str(rating["recipe_id"]))
     
@@ -194,11 +205,12 @@ def remove_rating(rating_id):
     require_login()
     rating = recipe_book.get_rating(rating_id)
     if rating["user_id"] != session["user_id"]:
-        abort(403)
+        forbidden()
     if request.method == "GET":
         return render_template("remove_rating.html", rating=rating)
 
     if request.method == "POST":
+        check_csrf(request)
         if "continue" in request.form:
             recipe_book.remove_rating(rating["id"])
         return redirect("/recipe/" + str(rating["recipe_id"]))
@@ -223,7 +235,7 @@ def search():
 def show_user(user_id):
     user = users.get_user(user_id)
     if not user:
-        abort(404)
+        not_found()
     recipes = recipe_book.get_recipes_by_user(user_id)
     return render_template("user.html", user=user, recipes=recipes)
 
@@ -234,6 +246,7 @@ def add_image():
         return render_template("add_image.html")
 
     if request.method == "POST":
+        check_csrf(request)
         file = request.files["image"]
         if not file.filename.endswith(".jpg"):
             return "VIRHE: väärä tiedostomuoto"
@@ -251,7 +264,7 @@ def add_image():
 def show_image(user_id):
     image = users.get_image(user_id)
     if not image:
-        abort(404)
+        not_found()
 
     response = make_response(bytes(image))
     response.headers.set("Content-Type", "image/jpeg")

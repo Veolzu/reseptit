@@ -22,7 +22,7 @@
     <ul>
     {% for class in classes %}
     <li>
-    | <a href="/search?query=&{{class.title}}={{class.title}}">{{ class.title }}</a>      
+     <a href="/search?query=&{{class.title}}={{class.title}}">{{ class.title }}</a>      
     </li>
     {%endfor%}
    </ul>
@@ -81,7 +81,7 @@
     <option value = "10">10</option>
     </select>
     <input type="hidden" name="recipe_id" value="{{ recipe.id }}" />
-    <input type="hidden" name="csrf_token" value={{session.csrf_token}} />
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Lähetä" />
   </form>
   <hr />
