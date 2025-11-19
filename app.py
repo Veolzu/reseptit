@@ -29,21 +29,29 @@ def register():
         username = request.form["username"]
         password1 = request.form["password1"]
         password2 = request.form["password2"]
-
+        filled = {"username": username}
         if password1 != password2:
-            return "VIRHE: salasanat eivät ole samat"
-
+            flash("Error: The passwords are not the same")
+            return render_template("register.html", filled=filled)
+        if password1 == "" and password2 == "":
+            flash("Error: Password field can't be empty")
+            return render_template("register.html", filled=filled)
+        if username == "":
+            flash("Error: username field can't be empty")
+            return render_template("register.html", filled=filled)
         try:
             users.create_user(username, password1)
             flash("Tunnuksen luominen onnistui, voit nyt kirjautua sisään")
-            return redirect("/")            
+            return redirect("/login")            
         except sqlite3.IntegrityError:
-            return "VIRHE: tunnus on jo varattu"
+            flash("Error: username is already taken")
+            return render_template("register.html", filled=filled)
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return render_template("login.html")
+        return render_template("login.html", next_page=request.referrer)
 
     if request.method == "POST":
         username = request.form["username"]
@@ -52,13 +60,17 @@ def login():
         if user_id:
             session["user_id"] = user_id
             session["csrf_token"] = secrets.token_hex(16)
+            session["username"] = username
+            flash("login successful!")
             return redirect("/")
         else:
-            return "VIRHE: väärä tunnus tai salasana"
-
+            flash("Error: Incorrect username or password")
+            return render_template("login.html", next_page=request.referrer)
 @app.route("/logout")
 def logout():
     del session["user_id"]
+    del session["csrf_token"]
+    del session["username"]
     return redirect("/")
 
 @app.route("/new_recipe", methods=["POST"])
@@ -230,6 +242,7 @@ def add_image():
 
         user_id = session["user_id"]
         users.update_image(user_id, image)
+        flash("Kuvan lisääminen onnistui")
         return redirect("/user/" + str(user_id))
 
 @app.route("/image/<int:user_id>")
@@ -253,7 +266,6 @@ def index(page=1):
     classes = recipe_book.get_all_classes()
     page_count = math.ceil(thread_count / page_size)
     page_count = max(page_count, 1)
-
     if page < 1:
         return redirect("/1")
     if page > page_count:

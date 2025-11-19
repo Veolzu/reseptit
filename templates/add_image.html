@@ -6,6 +6,11 @@
 </head>
 
 <body>
+  {% for message in get_flashed_messages() %}
+  <p>
+    <b>{{ message }}</b>
+  </p>
+  {% endfor %}
   <h1>Upload a profile picture</h1>
 
   <p>

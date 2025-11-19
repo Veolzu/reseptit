@@ -6,13 +6,17 @@
 </head>
 
 <body>
+  {% for message in get_flashed_messages() %}
+  <p>
+    <b>{{ message }}</b>
+  </p>
+  {% endfor %}
   <h1>Luo tunnus</h1>
 
   <form action="/register" method="post">
     <p>
       Tunnus: <br />
-      <input type="text" name="username" />
-    </p>
+      <input type="text" name="username" value="{{ filled.username }}" maxlength="16" />    </p>
     <p>
       Salasana: <br />
       <input type="password" name="password1" />
