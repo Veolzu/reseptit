@@ -46,7 +46,11 @@
 
   <hr />
   {% endfor %}
-
+  <p>
+    <a href="/recipe/{{recipe.id}}/{{ page - 1 }}">&lt;&lt;</a>
+    Sivu {{ page }}/{{ page_count }}
+    <a href="/recipe/{{recipe.id}}/{{ page + 1 }}">&gt;&gt;</a>
+  </p>
   {% if session.user_id %}
 
   <h2>Leave a review</h2>

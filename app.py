@@ -127,13 +127,23 @@ def new_rating():
     return redirect("/recipe/" + str(recipe_id))
 
 @app.route("/recipe/<int:recipe_id>")
-def show_recipe(recipe_id):
+@app.route("/recipe/<int:recipe_id>/<int:page>")
+def show_recipe(recipe_id, page=1):
+    page_size = 10
     recipe = recipe_book.get_recipe(recipe_id)
     if not recipe:
         not_found()
     ratings = recipe_book.get_ratings(recipe_id)
     classes = recipe_book.get_classes_of_recipe(recipe_id)
-    return render_template("recipe.html", recipe=recipe, ratings=ratings, classes=classes)
+    rating_count = len(ratings)
+    page_count = math.ceil(rating_count / page_size)
+    page_count = max(page_count, 1)
+    if page < 1:
+        return redirect("/recipe/" + str(recipe_id) + "/1")
+    if page > page_count:
+        return redirect("/recipe/" + str(recipe_id) + "/" + str(page_count))
+    ratings = ratings[(page-1)*page_size:page*page_size]
+    return render_template("recipe.html", recipe=recipe, ratings=ratings, classes=classes, page=page, page_count=page_count)
 
 
 @app.route("/edit_recipe/<int:recipe_id>", methods=["GET", "POST"])
@@ -217,7 +227,6 @@ def remove_rating(rating_id):
 
 
 @app.route("/search")
-@app.route("/search/<int:page>")
 def search(page=1):
     page_size = 10
     try:
@@ -247,12 +256,22 @@ def search(page=1):
 
 
 @app.route("/user/<int:user_id>")
-def show_user(user_id):
+@app.route("/user/<int:user_id>/<int:page>")
+def show_user(user_id, page=1):
+    page_size = 10
     user = users.get_user(user_id)
     if not user:
         not_found()
     recipes = recipe_book.get_recipes_by_user(user_id)
-    return render_template("user.html", user=user, recipes=recipes)
+    recipe_count = len(recipes)
+    page_count = math.ceil(recipe_count / page_size)
+    page_count = max(page_count, 1)
+    if page < 1:
+        return redirect("/user/" + str(user_id) + "/1")
+    if page > page_count:
+        return redirect("/user/" + str(user_id) + "/" + str(page_count))
+    recipes = recipes[(page-1)*page_size:page*page_size]
+    return render_template("user.html", user=user, recipes=recipes, page=page, page_count=page_count)
 
 @app.route("/add_image", methods=["GET", "POST"])
 def add_image():
