@@ -217,17 +217,32 @@ def remove_rating(rating_id):
 
 
 @app.route("/search")
-def search():
+@app.route("/search/<int:page>")
+def search(page=1):
+    page_size = 10
+    try:
+        page = int(request.full_path.split("/")[-1])
+    except ValueError:
+        page = 1
+    path = request.full_path.split("/")[1]
     all_classes = recipe_book.get_all_classes()
     query = request.args.get("query")
     classes = []
     tags = request.full_path.split("&")[1:]
+
     for tag in tags:
         checked_class = tag.split("=")[0]
         classes.append(checked_class)
     classes = [elem for elem in classes if elem]
-    results = recipe_book.search(query, classes) if (query or classes) else []
-    return render_template("search.html", query=query, results=results, all_classes=all_classes, classes=classes)
+    if query or classes:
+        results, result_count = recipe_book.search(query, classes, page, page_size)
+    else:
+        results = []
+        result_count = 0
+    print(path)
+    page_count = math.ceil(result_count / page_size)
+    page_count = max(page_count, 1)
+    return render_template("search.html", query=query, results=results, all_classes=all_classes, classes=classes, page=page, page_count=page_count, path=path)
 
 
 

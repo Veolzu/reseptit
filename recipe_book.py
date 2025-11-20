@@ -106,7 +106,8 @@ def remove_rating(rating_id):
     set_average_rating(recipe_id)
 
 
-def search(query, classes):
+def search(query, classes, page, page_size):
+    offset = page_size * (page) - 1
     true_results = []
     results = {}
     if query == "" and len(classes) > 0:
@@ -145,7 +146,11 @@ def search(query, classes):
             for result in promising:
                 if results[result["recipe_id"]] == len(classes):
                     true_results.append(result)
-    return true_results
+    try:
+        true_results_limited = true_results[(page-1)*page_size:page*page_size]
+    except IndexError:
+        return true_results
+    return (true_results_limited, len(true_results))
 
 
 def get_all_classes():
