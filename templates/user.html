@@ -15,12 +15,12 @@
   <h1>User {{ user.username }}</h1>
 
   {% if user.has_image %}
-  <img src="/image/{{ user.id }}">
+  <img src="/image/{{ user.id }}" alt="User's {{ user.username }} profile picture" />
   {% endif %}
 
   {% if user.id == session.user_id %}
   <p>
-    <a href="/add_image">Lisää profiilikuva</a>
+    <a href="/add_image">Upload a profile picture</a>
   </p>
   {% endif %}
   <p>

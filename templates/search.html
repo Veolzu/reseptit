@@ -11,21 +11,23 @@
     <p>
       Query:
       {% if query %}
-      <input type="text" name="query" value="{{ query }}" />
+      <label for="query">Search:</label>:<br />
+      <input type="text" name="query" id="query" value="{{ query }}" />
       {% else %}
+      <label for="query">Search:</label>:<br />
       <input type="text" name="query" />
       {% endif %}
     </p>
       {% for class in all_classes%}
         {% if class.title in classes%}
-        <input type="checkbox" name={{class.title}} value={{class.title}} checked>
+        <input type="checkbox" name={{class.title}} id={{class.title}} value={{class.title}} checked>
         <label for={{class.title}}>{{class.title }}</label><br>
         {% else %}
-        <input type="checkbox" name={{class.title}} value={{class.title}}>
+        <input type="checkbox" name={{class.title}} id={{class.title}} value={{class.title}}>
         <label for={{class.title}}>{{class.title }}</label><br>
         {% endif %}
       {% endfor %}
-    <input type="submit" value="Hae" />
+    <input type="submit" value="Search" />
   </form>
 
   {% if results %}
