@@ -111,43 +111,40 @@ def search(query, classes, page, page_size):
     true_results = []
     results = {}
     ids = set()
-    if query == "" and len(classes) > 0:
-        for tag in classes:
-            sql="""
-                SElECT c.recipe_id, c.title as class, r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
-                FROM recipe_classes c, recipes r, users u
-                WHERE c.recipe_id = r.id AND c.title like ? and r.user_id = u.id"""
-            promising = db.query(sql, [str(tag)])
-            print(len(promising))
-            for result in promising:
-                if result["recipe_id"] not in results:
-                    results[result["recipe_id"]] = 0
-                results[result["recipe_id"]] += 1
-        for result in promising:
-            if results[result["recipe_id"]] == len(classes):
-                if result["recipe_id"] not in ids:
-                    ids.add(result["recipe_id"])
-                    true_results.append(result)
-        print("true", len(true_results))
-    elif query != "" and classes == []:
+    if query != "" and len(classes) == 0:
         like = "%" + query + "%"
         sql="""
-            SElECT c.recipe_id, c.title as class, r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
-            FROM recipe_classes c, recipes r, users u
-            WHERE r.user_id = u.id AND (r.title LIKE ? OR r.content LIKE ?) AND c.recipe_id = r.id"""
+            SElECT  r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
+            FROM recipes r, users u
+            WHERE r.user_id = u.id AND (r.title LIKE ? OR r.content LIKE ?) """
         true_results = db.query(sql, [like, like])
-    else:   
-        like = "%" + query + "%"
-        for tag in classes:
-            sql="""
-                SElECT c.recipe_id, c.title as class, r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
-                FROM recipe_classes c, recipes r, users u
-                WHERE (c.recipe_id = r.id AND c.title like ? AND r.user_id = u.id AND r.title LIKE ?) OR (c.recipe_id = r.id AND c.title like ? AND r.user_id = u.id AND r.content LIKE ?)"""
-            promising = db.query(sql, [str(tag), like, str(tag), like])
-            for result in promising:
-                if result["recipe_id"] not in results:
-                    results[result["recipe_id"]] = 0
-                results[result["recipe_id"]] += 1
+        
+    else:
+        if query == "" and len(classes) > 0:
+            for tag in classes:
+                sql="""
+                    SElECT c.recipe_id, c.title as class, r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
+                    FROM recipe_classes c, recipes r, users u
+                    WHERE c.recipe_id = r.id AND c.title like ? and r.user_id = u.id"""
+                promising = db.query(sql, [str(tag)])
+                for result in promising:
+                    if result["recipe_id"] not in results:
+                        results[result["recipe_id"]] = 0
+                    results[result["recipe_id"]] += 1
+
+        else:   
+            like = "%" + query + "%"
+            for tag in classes:
+                sql="""
+                    SElECT c.recipe_id, c.title as class, r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
+                    FROM recipe_classes c, recipes r, users u
+                    WHERE (c.recipe_id = r.id AND c.title like ? AND r.user_id = u.id AND r.title LIKE ?) OR (c.recipe_id = r.id AND c.title like ? AND r.user_id = u.id AND r.content LIKE ?)"""
+                promising = db.query(sql, [str(tag), like, str(tag), like])
+                for result in promising:
+                    if result["recipe_id"] not in results:
+                        results[result["recipe_id"]] = 0
+                    results[result["recipe_id"]] += 1
+
         for result in promising:
             if results[result["recipe_id"]] == len(classes):
                 if result["recipe_id"] not in ids:

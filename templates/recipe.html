@@ -22,26 +22,29 @@
     <ul>
     {% for class in classes %}
     <li>
-     <a href="/search?query=&{{class.title}}={{class.title}}">{{ class.title }}</a>      
+     <a id="{{class.title}}" name ="{{class.title}}" href="/search?query=&{{class.title}}={{class.title}}">{{ class.title }}</a>   
+    <label for={{class.title}}>{{class.title}}</label><br>
+   
     </li>
     {%endfor%}
    </ul>
    <hr />
-    <p>{{recipe.content}}</p>
+    <p>{{recipe.content | show_lines}}</p>
     <hr />
 
   <h2> Reviews</h2>
 
   {% for review in ratings %}
   <p>
-    {{ review.username }}: {{ review.rating}}/10
+  <a href="/user/{{ review.user_id }}">{{ review.username }}</a>:
+  {{ review.rating}}/10
     {% if session.user_id == review.user_id %}
     | <a href="/edit_rating/{{ review.id }}">Edit</a>
     | <a href="/remove_rating/{{ review.id }}">Delete</a>
     {% endif %}
   </p>
   <p>
-    {{ review.content }}
+    {{ review.content | show_lines}}
   </p>
 
   <hr />
@@ -57,8 +60,8 @@
 
   <form action="/new_rating" method="post">
     <p>
-      Review:<br />
-      <textarea name="content" rows="5" cols="40" maxlength="5000" required></textarea>
+      <label for="content">rating</label>:<br />
+      <textarea name="content" id ="content" rows="5" cols="40" maxlength="5000" required></textarea>
     </p>
     <p>Review the recipe 1-10 (10 being the best):</p>
 

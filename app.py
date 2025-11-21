@@ -2,6 +2,7 @@ import sqlite3
 import math
 import time
 import secrets
+import markupsafe
 
 from flask import g
 from flask import Flask
@@ -10,6 +11,12 @@ import config, users, recipe_book
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+@app.template_filter()
+def show_lines(content):
+    content = str(markupsafe.escape(content))
+    content = content.replace("\n", "<br />")
+    return markupsafe.Markup(content)
 
 def forbidden():
     abort(403)
@@ -235,7 +242,11 @@ def search(page=1):
         page = 1
     path = request.full_path.split("/")[1]
     all_classes = recipe_book.get_all_classes()
-    query = request.args.get("query")
+    if query := request.args.get("query") is None:
+        query = ""
+    else:
+        query = request.args.get("query").split("/")[0]
+    print(query)
     classes = []
     tags = request.full_path.split("&")[1:]
 
@@ -248,13 +259,13 @@ def search(page=1):
     else:
         results = []
         result_count = 0
-
     page_count = math.ceil(result_count / page_size)
     page_count = max(page_count, 1)
     if page < 1:
         return redirect(path+"/1")
     if page > page_count:
-        return redirect(path+"/"+str(page_count))
+        return redirect(path+"/"+str(page_count))    
+
     return render_template("search.html", query=query, results=results, all_classes=all_classes, classes=classes, page=page, page_count=page_count, path=path)
 
 
@@ -275,11 +286,13 @@ def show_user(user_id, page=1):
     if page > page_count:
         return redirect("/user/" + str(user_id) + "/" + str(page_count))
     recipes = recipes[(page-1)*page_size:page*page_size]
-    return render_template("user.html", user=user, recipes=recipes, page=page, page_count=page_count)
+    return render_template("user.html", user=user, recipes=recipes, page=page, page_count=page_count, recipe_count=recipe_count)
 
 @app.route("/add_image", methods=["GET", "POST"])
 def add_image():
     require_login()
+    user_id = session["user_id"]
+
     if request.method == "GET":
         return render_template("add_image.html")
 
@@ -287,13 +300,14 @@ def add_image():
         check_csrf(request)
         file = request.files["image"]
         if not file.filename.endswith(".jpg"):
-            return "VIRHE: väärä tiedostomuoto"
+            flash("ERROR: wrong file type")
+            return redirect("/user/" + str(user_id))
 
         image = file.read()
         if len(image) > 100 * 1024:
-            return "VIRHE: liian suuri kuva"
+            flash("ERROR: file too large")
+            return redirect("/user/" + str(user_id))
 
-        user_id = session["user_id"]
         users.update_image(user_id, image)
         flash("The upload was succesful!")
         return redirect("/user/" + str(user_id))

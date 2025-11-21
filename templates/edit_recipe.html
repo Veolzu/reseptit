@@ -9,11 +9,11 @@
   <h1>Editing the recipe</h1>
   <form action="/edit_recipe/{{ recipe.id }}" method="post">
     <p>
-      Title: <br />
-      <textarea name="title" rows="1" cols="20" maxlength="100" required>{{ recipe.title }}</textarea>
+      <label for="title">Title</label>:<br />
+      <textarea name="title" id="title" rows="1" cols="20" maxlength="100" required>{{ recipe.title }}</textarea>
       <br />
-      Recipe:<br />
-      <textarea name="content" rows="5" cols="40" maxlength="5000" required>{{ recipe.content }}</textarea>
+      <label for="content">Recipe</label>:<br />
+      <textarea name="content" rows="5" cols="40" maxlength="5000" required>{{ recipe.content}}</textarea>
     </p>
       {% for class in classes%}
         <input type="checkbox" name={{class.title}} value={{class.title}}>

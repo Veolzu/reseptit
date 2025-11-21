@@ -10,12 +10,12 @@
 
   <form action="/login" method="post">
     <p>
-      Username: <br />
-      <input type="text" name="username" value="{{ filled.username }}" maxlength="16" />
+      <label for="username">username</label>:<br />
+      <input type="text" name="username" id ="username" value="{{ filled.username }}" maxlength="16" />
     </p>
     <p>
-      password: <br />
-      <input type="password" name="password" />
+      <label for="password">password</label>:<br />
+      <input type="password" name="password" id="password" />
     </p>
     <input type="submit" value="Kirjaudu" />
     {% if next_page %}
