@@ -2,6 +2,7 @@ import sqlite3
 import math
 import time
 import secrets
+import markupsafe
 
 from flask import g
 from flask import Flask
@@ -10,6 +11,12 @@ import config, users, recipe_book
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+@app.template_filter()
+def show_lines(content):
+    content = str(markupsafe.escape(content))
+    content = content.replace("\n", "<br />")
+    return markupsafe.Markup(content)
 
 def forbidden():
     abort(403)
@@ -271,7 +278,7 @@ def show_user(user_id, page=1):
     if page > page_count:
         return redirect("/user/" + str(user_id) + "/" + str(page_count))
     recipes = recipes[(page-1)*page_size:page*page_size]
-    return render_template("user.html", user=user, recipes=recipes, page=page, page_count=page_count)
+    return render_template("user.html", user=user, recipes=recipes, page=page, page_count=page_count, recipe_count=recipe_count)
 
 @app.route("/add_image", methods=["GET", "POST"])
 def add_image():
@@ -283,11 +290,11 @@ def add_image():
         check_csrf(request)
         file = request.files["image"]
         if not file.filename.endswith(".jpg"):
-            return "VIRHE: väärä tiedostomuoto"
+            return "ERROR: wrong file type"
 
         image = file.read()
         if len(image) > 100 * 1024:
-            return "VIRHE: liian suuri kuva"
+            return "ERROR: file too large"
 
         user_id = session["user_id"]
         users.update_image(user_id, image)

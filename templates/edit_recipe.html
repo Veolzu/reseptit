@@ -13,7 +13,7 @@
       <textarea name="title" rows="1" cols="20" maxlength="100" required>{{ recipe.title }}</textarea>
       <br />
       Recipe:<br />
-      <textarea name="content" rows="5" cols="40" maxlength="5000" required>{{ recipe.content }}</textarea>
+      <textarea name="content" rows="5" cols="40" maxlength="5000" required>{{ recipe.content}}</textarea>
     </p>
       {% for class in classes%}
         <input type="checkbox" name={{class.title}} value={{class.title}}>

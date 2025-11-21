@@ -27,7 +27,7 @@
     {%endfor%}
    </ul>
    <hr />
-    <p>{{recipe.content}}</p>
+    <p>{{recipe.content | show_lines}}</p>
     <hr />
 
   <h2> Reviews</h2>
@@ -41,7 +41,7 @@
     {% endif %}
   </p>
   <p>
-    {{ review.content }}
+    {{ review.content | show_lines}}
   </p>
 
   <hr />
