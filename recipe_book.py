@@ -110,6 +110,7 @@ def search(query, classes, page, page_size):
     offset = page_size * (page) - 1
     true_results = []
     results = {}
+    ids = set()
     if query == "" and len(classes) > 0:
         for tag in classes:
             sql="""
@@ -117,14 +118,18 @@ def search(query, classes, page, page_size):
                 FROM recipe_classes c, recipes r, users u
                 WHERE c.recipe_id = r.id AND c.title like ? and r.user_id = u.id"""
             promising = db.query(sql, [str(tag)])
+            print(len(promising))
             for result in promising:
                 if result["recipe_id"] not in results:
                     results[result["recipe_id"]] = 0
                 results[result["recipe_id"]] += 1
-            for result in promising:
-                if results[result["recipe_id"]] == len(classes):
+        for result in promising:
+            if results[result["recipe_id"]] == len(classes):
+                if result["recipe_id"] not in ids:
+                    ids.add(result["recipe_id"])
                     true_results.append(result)
-    if query != "" and classes == []:
+        print("true", len(true_results))
+    elif query != "" and classes == []:
         like = "%" + query + "%"
         sql="""
             SElECT c.recipe_id, c.title as class, r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
@@ -143,13 +148,15 @@ def search(query, classes, page, page_size):
                 if result["recipe_id"] not in results:
                     results[result["recipe_id"]] = 0
                 results[result["recipe_id"]] += 1
-            for result in promising:
-                if results[result["recipe_id"]] == len(classes):
+        for result in promising:
+            if results[result["recipe_id"]] == len(classes):
+                if result["recipe_id"] not in ids:
+                    ids.add(result["recipe_id"])
                     true_results.append(result)
     try:
         true_results_limited = true_results[(page-1)*page_size:page*page_size]
     except IndexError:
-        return true_results
+        return (true_results, len(true_results))
     return (true_results_limited, len(true_results))
 
 

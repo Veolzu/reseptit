@@ -248,9 +248,13 @@ def search(page=1):
     else:
         results = []
         result_count = 0
-    print(path)
+
     page_count = math.ceil(result_count / page_size)
     page_count = max(page_count, 1)
+    if page < 1:
+        return redirect(path+"/1")
+    if page > page_count:
+        return redirect(path+"/"+str(page_count))
     return render_template("search.html", query=query, results=results, all_classes=all_classes, classes=classes, page=page, page_count=page_count, path=path)
 
 
