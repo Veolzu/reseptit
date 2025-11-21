@@ -36,7 +36,8 @@
 
   {% for review in ratings %}
   <p>
-    {{ review.username }}: {{ review.rating}}/10
+  <a href="/user/{{ review.user_id }}">{{ review.username }}</a>:
+  {{ review.rating}}/10
     {% if session.user_id == review.user_id %}
     | <a href="/edit_rating/{{ review.id }}">Edit</a>
     | <a href="/remove_rating/{{ review.id }}">Delete</a>
