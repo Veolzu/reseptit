@@ -9,12 +9,11 @@
   <h1>Search</h1>
   <form action="/search" method="get">
     <p>
-      Query:
       {% if query %}
-      <label for="query">Search:</label>:<br />
+      <label for="query">Search:</label><br />
       <input type="text" name="query" id="query" value="{{ query }}" />
       {% else %}
-      <label for="query">Search:</label>:<br />
+      <label for="query">Search:</label><br />
       <input type="text" name="query" />
       {% endif %}
     </p>

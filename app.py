@@ -242,7 +242,10 @@ def search(page=1):
         page = 1
     path = request.full_path.split("/")[1]
     all_classes = recipe_book.get_all_classes()
-    query = request.args.get("query").split("/")[0]
+    if query := request.args.get("query") is None:
+        query = ""
+    else:
+        query = request.args.get("query").split("/")[0]
     print(query)
     classes = []
     tags = request.full_path.split("&")[1:]
@@ -289,6 +292,8 @@ def show_user(user_id, page=1):
 @app.route("/add_image", methods=["GET", "POST"])
 def add_image():
     require_login()
+    user_id = session["user_id"]
+
     if request.method == "GET":
         return render_template("add_image.html")
 
@@ -296,13 +301,14 @@ def add_image():
         check_csrf(request)
         file = request.files["image"]
         if not file.filename.endswith(".jpg"):
-            return "ERROR: wrong file type"
+            flash("ERROR: wrong file type")
+            return redirect("/user/" + str(user_id))
 
         image = file.read()
         if len(image) > 100 * 1024:
-            return "ERROR: file too large"
+            flash("ERROR: file too large")
+            return redirect("/user/" + str(user_id))
 
-        user_id = session["user_id"]
         users.update_image(user_id, image)
         flash("The upload was succesful!")
         return redirect("/user/" + str(user_id))

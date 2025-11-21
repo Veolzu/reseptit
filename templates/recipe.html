@@ -22,7 +22,9 @@
     <ul>
     {% for class in classes %}
     <li>
-     <a href="/search?query=&{{class.title}}={{class.title}}">{{ class.title }}</a>      
+     <a id="{{class.title}}" name ="{{class.title}}" href="/search?query=&{{class.title}}={{class.title}}">{{ class.title }}</a>   
+    <label for={{class.title}}>{{class.title}}</label><br>
+   
     </li>
     {%endfor%}
    </ul>
