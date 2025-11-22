@@ -1,24 +1,29 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Remove a recipe</title>
-</head>
+{% block title %}Remove a recipe{% endblock %}
 
-<body>
+{% block content %}
+<div class="confirm-container">
   <h1>Remove a recipe</h1>
-  <form action="/remove_recipe/{{ recipe.id }}" method="post">
+
+  {% if get_flashed_messages() | length > 0 %}
+  <div class="info_messages">
+    {% for message in get_flashed_messages() %}
+    <p><b>{{ message }}</b></p>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <form class="confirm-form" action="/remove_recipe/{{ recipe.id }}" method="post">
     <p>
       Are you sure you want to remove the recipe "{{ recipe.title | show_lines}}"?
     </p>
-    <input type="hidden" name="csrf_token" value={{session.csrf_token}} />
-    <input type="submit" name="continue" value="Continue" />
-    <input type="submit" name="cancel" value="Back" />
-  </form>
-  <hr />
-    <p>
-    <a href="/">Front page</a>
-    </p>
-</body>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
 
-</html>
+    <div class="confirm-actions">
+      <input class="btn btn-danger" type="submit" name="continue" value="Continue" />
+      <input class="btn btn-secondary" type="submit" name="cancel" value="Back" />
+    </div>
+  </form>
+</div>
+{% endblock %}

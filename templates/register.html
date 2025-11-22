@@ -1,36 +1,36 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Register</title>
-</head>
+{% block title %}Register{% endblock %}
 
-<body>
-  {% for message in get_flashed_messages() %}
-  <p>
-    <b>{{ message }}</b>
-  </p>
-  {% endfor %}
+{% block content %}
+<div class="auth-container">
   <h1>Create an account</h1>
 
-  <form action="/register" method="post">
-    <p>
-      <label for="username">username</label>:<br />
-      <input type="text" name="username" id ="username" value="{{ filled.username }}" maxlength="16" />    </p>
-    <p>
-      <label for="password1">password</label>:<br />
-      <input type="password" name="password1" id="password1"/>
-    </p>
-    <p>
-      <label for="password2">Repeat the password</label>:<br />
-      <input type="password" name="password2" id="password2"/>
-    </p>
-    <input type="submit" value="Register" />
-  </form>
-  <hr />
-    <p>
-    <a href="/">Front page</a>
-    </p>
-</body>
+  {% if get_flashed_messages() | length > 0 %}
+  <div class="info_messages">
+    {% for message in get_flashed_messages() %}
+    <p><b>{{ message }}</b></p>
+    {% endfor %}
+  </div>
+  {% endif %}
 
-</html>
+  <form class="auth-form" action="/register" method="post" autocomplete="on">
+    <label for="username">Username</label>
+    <input type="text" name="username" id="username" value="{{ filled.username }}" maxlength="16" required />
+
+    <label for="password1">Password</label>
+    <input type="password" name="password1" id="password1" required />
+
+    <label for="password2">Repeat password</label>
+    <input type="password" name="password2" id="password2" required />
+
+    <input class="btn" type="submit" value="Register" />
+  </form>
+
+  <div class="auth-help">
+    <p>
+      <a href="/">Back to front page</a> | <a href="/login">Log in</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

@@ -1,38 +1,39 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Log in</title>
-</head>
+{% block title %}Log in{% endblock %}
 
-<body>
+{% block content %}
+<div class="auth-container">
   <h1>Log in</h1>
 
-  <form action="/login" method="post">
-    <p>
-      <label for="username">username</label>:<br />
-      <input type="text" name="username" id ="username" value="{{ filled.username }}" maxlength="16" />
-    </p>
-    <p>
-      <label for="password">password</label>:<br />
-      <input type="password" name="password" id="password" />
-    </p>
-    <input type="submit" value="Kirjaudu" />
+  {% if get_flashed_messages() | length > 0 %}
+  <div class="info_messages">
+    {% for message in get_flashed_messages() %}
+    <p><b>{{ message }}</b></p>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <form class="auth-form" action="/login" method="post" autocomplete="on">
+    <label for="username">Username</label>
+    <input type="text" name="username" id="username" value="{{ filled.username }}" maxlength="16" required />
+
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" required />
+
     {% if next_page %}
       <input type="hidden" name="next_page" value="{{ next_page }}" />
     {% else %}
       <input type="hidden" name="next_page" value="/" />
     {% endif %}
-  </form>
-  {% for message in get_flashed_messages() %}
-  <p>
-    <b>{{ message }}</b>
-  </p>
-  {% endfor %}
-  <hr />
-    <p>
-    <a href="/">Front page</a>
-    </p>
-</body>
 
-</html>
+    <input class="btn" type="submit" value="Log in" />
+  </form>
+
+  <div class="auth-help">
+    <p>
+      <a href="/">Back to front page</a> | <a href="/register">Register</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

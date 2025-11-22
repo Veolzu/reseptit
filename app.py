@@ -67,10 +67,12 @@ def login():
         return render_template("login.html", next_page=request.referrer, filled={})
 
     if request.method == "POST":
+        next_page = request.form["next_page"]
+        if "register" in next_page or "login" in next_page or not next_page:
+            next_page = "/"
         username = request.form["username"]
         password = request.form["password"]
         user_id = users.check_login(username, password)
-        next_page = request.form["next_page"]
         if user_id:
             session["user_id"] = user_id
             session["csrf_token"] = secrets.token_hex(16)
@@ -177,7 +179,7 @@ def edit_recipe(recipe_id):
                 classes.append(request.form[elem["title"]])
             except KeyError:
                 continue
-
+        print(classes)
         for title in classes:
             recipe_book.add_recipe_class(recipe_id, title)
         return redirect("/recipe/" + str(recipe_id))

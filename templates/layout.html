@@ -14,12 +14,11 @@
   <div class="nav">
     <nav>
         <p>
-        <a href="/">Front page</a> |
+        | <a href="/">Front page</a> |
         <a href="/search">Search</a> |
         <a href="/register">Register</a> |
         {% if session.user_id %}
         <a href="/user/{{ session.user_id }}">Profile page</a> |
-
         <a href="/logout">Log out</a> |
         {% else %}
         <a href="/login">Log in</a> |
@@ -32,7 +31,6 @@
       {% endif %}
     </nav>
   </div>
-
   <div class="content">
     {% block content %}{% endblock %}
   </div>

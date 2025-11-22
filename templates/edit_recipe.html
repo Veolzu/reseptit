@@ -1,31 +1,38 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Editing</title>
-</head>
+{% block title %}Edit recipe{% endblock %}
 
-<body>
+{% block content %}
+<div class="edit-container">
   <h1>Editing the recipe</h1>
-  <form action="/edit_recipe/{{ recipe.id }}" method="post">
-    <p>
-      <label for="title">Title</label>:<br />
-      <textarea name="title" id="title" rows="1" cols="20" maxlength="100" required>{{ recipe.title }}</textarea>
-      <br />
-      <label for="content">Recipe</label>:<br />
-      <textarea name="content" rows="5" cols="40" maxlength="5000" required>{{ recipe.content}}</textarea>
-    </p>
-      {% for class in classes%}
-        <input type="checkbox" name={{class.title}} value={{class.title}}>
-        <label for={{class.title}}>{{class.title }}</label><br>
-      {% endfor %}
-    <input type="hidden" name="csrf_token" value={{session.csrf_token}} />
-    <input type="submit" value="Lähetä" />
-  </form>
-  <hr />
-    <p>
-    <a href="/">Front page</a>
-    </p>
-</body>
 
-</html>
+  {% if get_flashed_messages() | length > 0 %}
+  <div class="info_messages">
+    {% for message in get_flashed_messages() %}
+    <p><b>{{ message }}</b></p>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <form class="form" action="/edit_recipe/{{ recipe.id }}" method="post">
+    <label for="title">Title</label>
+    <textarea name="title" id="title" rows="1" maxlength="100" required>{{ recipe.title }}</textarea>
+
+    <label for="content">Recipe</label>
+    <textarea name="content" id="content" rows="6" maxlength="5000" required>{{ recipe.content }}</textarea>
+
+    <div class="form-classes">
+      {% for class in classes %}
+        <label class="class-item">
+          <input type="checkbox" name="{{ class.title }}" value="{{ class.title }}"
+            {% if class.title in (recipe_classes|default([])) %}checked{% endif %} />
+          {{ class.title }}
+        </label>
+      {% endfor %}
+    </div>
+
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+    <input class="btn" type="submit" value="Save" />
+  </form>
+</div>
+{% endblock %}

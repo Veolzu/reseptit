@@ -25,10 +25,12 @@ body {
 
 }
 
+
 .info_messages{
     background-color: #e7f3fe;
     border-left: 6px solid #2196F3;
     margin-bottom: 15px;
+    padding: 10px 15px;
 
 }
 
@@ -36,8 +38,8 @@ body {
     margin-bottom: 20px;
     background-color: #fff8f8;
     border: 1px solid #ddd;
-    padding: 15px;
-
+    padding-top: 0px;
+    padding-left: 15px
 }
 
 .pagination{
@@ -63,16 +65,182 @@ body {
     background-color: #cfe8e6;
 }
 
-.pagination .current{
-    font-weight: 700;
-    background-color: #bfe0de;
-    padding: 6px 10px;
-    border-radius: 4px;
-}
-
 .new_recipe{
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     padding: 15px;
     margin-top: 20px;
+}
+
+/* Authentication form/container styles */
+.auth-container{
+    max-width: 520px;
+    margin: 18px auto;
+    background: #ffffff;
+    padding: 18px;
+    border: 1px solid #e0e6e5;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.auth-container h1{
+    margin-top: 0;
+    color: #034140;
+}
+
+.auth-form label{
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #034140;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="password"]{
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cfcfcf;
+    border-radius: 6px;
+    box-sizing: border-box;
+    margin-bottom: 12px;
+}
+
+.auth-form .btn,
+.auth-form input[type="submit"]{
+    background-color: #034140;
+    color: #ffffff;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.auth-form .btn:hover,
+.auth-form input[type="submit"]:hover{
+    background-color: #012a27;
+}
+
+.auth-help{
+    margin-top: 12px;
+    text-align: center;
+}
+
+.auth-help a{
+    color: #034140;
+    text-decoration: none;
+}
+
+.auth-help a:hover{
+    text-decoration: underline;
+}
+
+.new_review{
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+
+.reviews{
+    background-color: #fefefe;
+    border: 1px solid #ddd;
+    padding: 15px;
+}
+
+.classifications{
+    background-color: #fefefe;
+    border: 1px solid #ddd;
+    padding-left: 10px;
+}
+
+.content{
+    background-color: #fefefe;
+    border: 1px solid #ddd;
+    padding: 15px;
+}
+
+
+.profile_picture{
+    border: 1px solid #6d6d6d;
+}
+
+/* Confirmation dialog/card styles */
+.confirm-container{
+    max-width: 600px;
+    margin: 18px auto;
+    background: #fffefc;
+    padding: 18px;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+}
+
+.confirm-container h1{
+    margin-top: 0;
+    color: #8a2f2f;
+}
+
+.confirm-actions{
+    margin-top: 14px;
+}
+
+/* Generic button styles and modifiers */
+.btn{
+    display: inline-block;
+    padding: 9px 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-danger{
+    background-color: #b33a3a;
+    color: #fff;
+}
+
+.btn-danger:hover{ background-color: #8f2d2d }
+
+.btn-secondary{
+    background-color: #e9ecef;
+    color: #123;
+    margin-left: 8px;
+}
+
+.btn-secondary:hover{ background-color: #dde3e6 }
+
+/* Edit pages (recipe, rating) */
+.edit-container{
+    max-width: 760px;
+    margin: 18px auto;
+    background: #ffffff;
+    padding: 18px;
+    border: 1px solid #ececec;
+    border-radius: 8px;
+}
+
+.edit-container textarea{
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    box-sizing: border-box;
+    margin-bottom: 12px;
+    font-family: inherit;
+}
+
+.form-classes{
+    margin: 8px 0 12px 0;
+}
+
+.class-item{
+    display: inline-block;
+    margin-right: 10px;
+    font-weight: 500;
+}
+
+.edit-container select{
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
 }

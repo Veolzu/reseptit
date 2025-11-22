@@ -4,6 +4,12 @@
 <head>
     <title>{{ recipe.title }}</title>
 </head>
+
+<body>
+    {% extends "layout.html" %}
+
+    {% block title %}{{ recipe.title }}{% endblock %}
+    {% block content %}
     <h1>{{ recipe.title }} </h1>
     {% if session.user_id == recipe.user_id %}
     | <a href="/edit_recipe/{{ recipe.id }}">Edit</a>
@@ -18,6 +24,7 @@
       {% endif %}
     <p>
     <hr />
+    <div class="classifications">
     <h3>Classifications</h3>
     <ul>
     {% for class in classes %}
@@ -28,12 +35,15 @@
     </li>
     {%endfor%}
    </ul>
+    </div>
    <hr />
+   <div class="content">
     <p>{{recipe.content | show_lines}}</p>
+    </div>
     <hr />
 
+  <div class="reviews">
   <h2> Reviews</h2>
-
   {% for review in ratings %}
   <p>
   <a href="/user/{{ review.user_id }}">{{ review.username }}</a>:
@@ -49,13 +59,17 @@
 
   <hr />
   {% endfor %}
+  </div>
+
+  <div class="pagination">
   <p>
     <a href="/recipe/{{recipe.id}}/{{ page - 1 }}">&lt;&lt;</a>
     page {{ page }}/{{ page_count }}
     <a href="/recipe/{{recipe.id}}/{{ page + 1 }}">&gt;&gt;</a>
   </p>
+  </div>
   {% if session.user_id %}
-
+  <div class="new_review">
   <h2>Leave a review</h2>
 
   <form action="/new_rating" method="post">
@@ -89,7 +103,7 @@
     </select>
     <input type="hidden" name="recipe_id" value="{{ recipe.id }}" />
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" value="Lähetä" />
+    <input type="submit" value="Submit" />
   </form>
   <hr />
   {% else %}
@@ -97,7 +111,6 @@
       If you want to leave a review, for this recipe <a href="/login">login</a> or <a href="/register"> register</a>
     </p>
   {% endif %}
-
-    <p>
-    <a href="/">Front page</a>
-    </p>
+  </div>
+  {% endblock %}
+</body>

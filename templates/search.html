@@ -5,6 +5,10 @@
   <title>Search</title>
 </head>
 
+  {% extends "layout.html" %}
+
+  {% block title %}Search{% endblock %}
+  {% block content %}
 <body>
   <h1>Search</h1>
   <form action="/search" method="get">
@@ -31,8 +35,8 @@
 
   {% if results %}
   <hr />
+  <div class="recipes">
   <h2>Results</h2>
-  
   <ul>
   {% for result in results %}
     <li>
@@ -47,16 +51,17 @@
         has not been reviewed yet
     {% endif %}
     </li>
+    <hr />
   {% endfor %}
   </ul>
+  </div>
   {% endif %}
+  <div class="pagination">
   <p>
     <a href="/{{path}}/{{ page - 1 }}">&lt;&lt;</a>
     page {{ page }}/{{ page_count }}
     <a href="/{{path}}/{{ page + 1 }}">&gt;&gt;</a>
   </p>
-  <hr />
-    <p>
-    <a href="/">Front page</a>
-    </p>
+  </div>
+  {% endblock %}
 </body>

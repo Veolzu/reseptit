@@ -71,11 +71,15 @@
         <label for={{class.title}}>{{class.title }}</label><br>
       {% endfor %}
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" value="Lähetä" />
-  
+    <input type="submit" value="Submit" />
   </form>
   {% endif %}
   </div>
+  {% if not session.user_id %}
+  <p>
+    if you want to upload a recipe, please <a href="/login">login</a> first.
+  </p>
+  {% endif %}
   {% endblock %}
   
 
