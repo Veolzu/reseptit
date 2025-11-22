@@ -31,3 +31,5 @@ CREATE TABLE recipe_classes (
     recipe_id INTEGER REFERENCES recipes,
     title TEXT
 );
+
+CREATE INDEX `idx_ratings` ON `ratings` (`recipe_id`);
