@@ -12,8 +12,7 @@ data.execute("DELETE FROM ratings")
 data.execute("DELETE FROM recipe_classes")
 
 user_count = 1000
-recipe_count = 10**5
-rating_count = 10**6
+recipe_count = 10**6
 classes = ["appetizer", "entree", "dessert", "vegan", "meat", "chinese"] #mexican tag is purposefully missing so you can check if search works
 #so after this data-set mexican tag should get no results
 for i in range(1, user_count + 1):
@@ -30,7 +29,7 @@ for i in range(1, recipe_count + 1):
         sql = "INSERT INTO recipe_classes (recipe_id, title) VALUES (?, ?)"
         data.execute(sql, [i, classes[indice]])
     sum = 0
-    n=random.randint(0, 17)
+    n=random.randint(0, 101)
     for j in range(0, n):
         user_id = random.randint(1, user_count)
         recipe_id = i
