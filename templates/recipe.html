@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>{{ recipe.title }}</title>
-</head>
+  </head>
 
-<body>
+  <body>
     {% extends "layout.html" %}
 
     {% block title %}{{ recipe.title }}{% endblock %}
     {% block content %}
-    <h1>{{ recipe.title }} </h1>
-    {% if session.user_id == recipe.user_id %}
-    | <a href="/edit_recipe/{{ recipe.id }}">Edit</a>
-    | <a href="/remove_recipe/{{ recipe.id }}">Delete</a>
-    {% endif %}
-    </p>
+      <h1>{{ recipe.title }} </h1>
+      {% if session.user_id == recipe.user_id %}
+        | <a href="/edit_recipe/{{ recipe.id }}">Edit</a>
+        | <a href="/remove_recipe/{{ recipe.id }}">Delete</a>
+      {% endif %}
+      </p>
       made by <a href="/user/{{ recipe.user_id }}">{{ recipe.username }}</a>,
       {% if recipe.avg_rating is not none %}
         average rating: {{ recipe.avg_rating }}
@@ -25,92 +24,91 @@
     <p>
     <hr />
     <div class="classifications">
-    <h3>Classifications</h3>
-    <ul>
-    {% for class in classes %}
-    <li>
-     <a id="{{class.title}}" name ="{{class.title}}" href="/search?query=&{{class.title}}={{class.title}}">{{ class.title }}</a>   
-    <label for={{class.title}}>{{class.title}}</label><br>
-   
-    </li>
-    {%endfor%}
-   </ul>
+      <h3>Classifications</h3>
+      <ul>
+        {% for class in classes %}
+          <li>
+            <a id="{{class.title}}" name ="{{class.title}}" href="/search?query=&{{class.title}}={{class.title}}">{{ class.title }}</a>
+            <label for={{class.title}}>{{class.title}}</label><br>
+          </li>
+        {%endfor%}
+      </ul>
     </div>
-   <hr />
-   <div class="content">
-    <p>{{recipe.content | show_lines}}</p>
+    <hr />
+    <div class="content">
+      <p>{{recipe.content | show_lines}}</p>
     </div>
     <hr />
 
-  <div class="reviews">
-  <h2> Reviews</h2>
-  {% for review in ratings %}
-  <p>
-  <a href="/user/{{ review.user_id }}">{{ review.username }}</a>:
-  {{ review.rating}}/10
-    {% if session.user_id == review.user_id %}
-    | <a href="/edit_rating/{{ review.id }}">Edit</a>
-    | <a href="/remove_rating/{{ review.id }}">Delete</a>
-    {% endif %}
-  </p>
-  <p>
-    {{ review.content | show_lines}}
-  </p>
+    <div class="reviews">
+      <h2> Reviews</h2>
+      {% for review in ratings %}
+        <p>
+          <a href="/user/{{ review.user_id }}">{{ review.username }}</a>:
+          {{ review.rating}}/10
+          {% if session.user_id == review.user_id %}
+            | <a href="/edit_rating/{{ review.id }}">Edit</a>
+            | <a href="/remove_rating/{{ review.id }}">Delete</a>
+          {% endif %}
+        </p>
+        <p>
+          {{ review.content | show_lines}}
+        </p>
 
-  <hr />
-  {% endfor %}
-  </div>
+        <hr />
+      {% endfor %}
+    </div>
 
-  <div class="pagination">
-  <p>
-    <a href="/recipe/{{recipe.id}}/{{ page - 1 }}">&lt;&lt;</a>
-    page {{ page }}/{{ page_count }}
-    <a href="/recipe/{{recipe.id}}/{{ page + 1 }}">&gt;&gt;</a>
-  </p>
-  </div>
-  {% if session.user_id %}
-  <div class="new_review">
-  <h2>Leave a review</h2>
+    <div class="pagination">
+      <p>
+        <a href="/recipe/{{recipe.id}}/{{ page - 1 }}">&lt;&lt;</a>
+        page {{ page }}/{{ page_count }}
+        <a href="/recipe/{{recipe.id}}/{{ page + 1 }}">&gt;&gt;</a>
+      </p>
+    </div>
+    {% if session.user_id %}
+      <div class="new_review">
+        <h2>Leave a review</h2>
 
-  <form action="/new_rating" method="post">
-    <p>
-      <label for="content">rating</label>:<br />
-      <textarea name="content" id ="content" rows="5" cols="40" maxlength="5000" required></textarea>
-    </p>
-    <p>Review the recipe 1-10 (10 being the best):</p>
+        <form action="/new_rating" method="post">
+          <p>
+            <label for="content">rating</label>:<br />
+            <textarea name="content" id ="content" rows="5" cols="40" maxlength="5000" required></textarea>
+          </p>
+          <p>Review the recipe 1-10 (10 being the best):</p>
 
-    <select name = "dropdown">
+          <select name = "dropdown">
 
-    <option value = "1">1</option>
+            <option value = "1">1</option>
 
-    <option value = "2">2</option>
+            <option value = "2">2</option>
 
-    <option value = "3">3</option>
+            <option value = "3">3</option>
 
-    <option value = "4">4</option>
+            <option value = "4">4</option>
 
-    <option value = "5">5</option>
+            <option value = "5">5</option>
 
-    <option value = "6">6</option>
+            <option value = "6">6</option>
 
-    <option value = "7">7</option>
+            <option value = "7">7</option>
 
-    <option value = "8">8</option>
+            <option value = "8">8</option>
 
-    <option value = "9">9</option>
+            <option value = "9">9</option>
 
-    <option value = "10">10</option>
-    </select>
-    <input type="hidden" name="recipe_id" value="{{ recipe.id }}" />
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" value="Submit" />
-  </form>
-  <hr />
-  {% else %}
-    <p> 
-      If you want to leave a review, for this recipe <a href="/login">login</a> or <a href="/register"> register</a>
-    </p>
-  {% endif %}
-  </div>
-  {% endblock %}
-</body>
+            <option value = "10">10</option>
+          </select>
+          <input type="hidden" name="recipe_id" value="{{ recipe.id }}" />
+          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+          <input type="submit" value="Submit" />
+        </form>
+        <hr />
+      {% else %}
+        <p>
+          If you want to leave a review, for this recipe <a href="/login">login</a> or <a href="/register"> register</a>
+        </p>
+      {% endif %}
+    </div>
+    {% endblock %}
+  </body>

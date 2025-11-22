@@ -3,38 +3,38 @@
 {% block title %}Edit recipe{% endblock %}
 
 {% block content %}
-<div class="edit-container">
-  <h1>Editing the recipe</h1>
+  <div class="edit-container">
+    <h1>Editing the recipe</h1>
 
-  {% if get_flashed_messages() | length > 0 %}
-  <div class="info_messages">
-    {% for message in get_flashed_messages() %}
-    <p><b>{{ message }}</b></p>
-    {% endfor %}
+    {% if get_flashed_messages() | length > 0 %}
+      <div class="info_messages">
+        {% for message in get_flashed_messages() %}
+          <p><b>{{ message }}</b></p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form class="form" action="/edit_recipe/{{ recipe.id }}" method="post">
+      <label for="title">Title</label>
+      <textarea name="title" id="title" rows="1" maxlength="100" required>{{ recipe.title }}</textarea>
+
+      <label for="content">Recipe</label>
+      <textarea name="content" id="content" rows="6" maxlength="5000" required>{{ recipe.content }}</textarea>
+
+      <div class="form-classes">
+        {% for class in classes%}
+          {% if class.title in selected_classes%}
+            <input type="checkbox" name={{class.title}} id={{class.title}} value={{class.title}} checked>
+            <label for={{class.title}}>{{class.title}}</label><br>
+          {% else %}
+            <input type="checkbox" name={{class.title}} id={{class.title}} value={{class.title}}>
+            <label for={{class.title}}>{{class.title }}</label><br>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <input class="btn" type="submit" value="Save" />
+    </form>
   </div>
-  {% endif %}
-
-  <form class="form" action="/edit_recipe/{{ recipe.id }}" method="post">
-    <label for="title">Title</label>
-    <textarea name="title" id="title" rows="1" maxlength="100" required>{{ recipe.title }}</textarea>
-
-    <label for="content">Recipe</label>
-    <textarea name="content" id="content" rows="6" maxlength="5000" required>{{ recipe.content }}</textarea>
-
-    <div class="form-classes">
-      {% for class in classes%}
-        {% if class.title in selected_classes%}
-        <input type="checkbox" name={{class.title}} id={{class.title}} value={{class.title}} checked>
-        <label for={{class.title}}>{{class.title}}</label><br>
-        {% else %}
-        <input type="checkbox" name={{class.title}} id={{class.title}} value={{class.title}}>
-        <label for={{class.title}}>{{class.title }}</label><br>
-        {% endif %}
-      {% endfor %}
-    </div>
-
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input class="btn" type="submit" value="Save" />
-  </form>
-</div>
 {% endblock %}

@@ -1,67 +1,66 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <title>Search</title>
-</head>
+  <head>
+    <title>Search</title>
+  </head>
 
   {% extends "layout.html" %}
 
   {% block title %}Search{% endblock %}
   {% block content %}
-<body>
-  <h1>Search</h1>
-  <form action="/search" method="get">
-    <p>
-      {% if query %}
-      <label for="query">Search:</label><br />
-      <input type="text" name="query" id="query" value="{{ query }}" />
-      {% else %}
-      <label for="query">Search:</label><br />
-      <input type="text" name="query" />
-      {% endif %}
-    </p>
+  <body>
+    <h1>Search</h1>
+    <form action="/search" method="get">
+      <p>
+        {% if query %}
+          <label for="query">Search:</label><br />
+          <input type="text" name="query" id="query" value="{{ query }}" />
+        {% else %}
+          <label for="query">Search:</label><br />
+          <input type="text" name="query" />
+        {% endif %}
+      </p>
       {% for class in all_classes%}
         {% if class.title in classes%}
-        <input type="checkbox" name={{class.title}} id={{class.title}} value={{class.title}} checked>
-        <label for={{class.title}}>{{class.title }}</label><br>
+          <input type="checkbox" name={{class.title}} id={{class.title}} value={{class.title}} checked>
+          <label for={{class.title}}>{{class.title }}</label><br>
         {% else %}
-        <input type="checkbox" name={{class.title}} id={{class.title}} value={{class.title}}>
-        <label for={{class.title}}>{{class.title }}</label><br>
+          <input type="checkbox" name={{class.title}} id={{class.title}} value={{class.title}}>
+          <label for={{class.title}}>{{class.title }}</label><br>
         {% endif %}
       {% endfor %}
-    <input type="submit" value="Search" />
-  </form>
+      <input type="submit" value="Search" />
+    </form>
 
-  {% if results %}
-  <hr />
-  <div class="recipes">
-  <h2>Results</h2>
-  <ul>
-  {% for result in results %}
-    <li>
-      <a href="/recipe/{{ result.id }}">
-        {{ result.title }}
-      </a>
-      <br />
-            made by <a href="/user/{{ result.user_id }}">{{ result.username }}</a>,
-    {% if result.avg_rating is not none %}
-        average rating: {{ result.avg_rating }}
-    {% else %}
-        has not been reviewed yet
+    {% if results %}
+      <hr />
+      <div class="recipes">
+        <h2>Results</h2>
+        <ul>
+          {% for result in results %}
+            <li>
+              <a href="/recipe/{{ result.id }}">
+                {{ result.title }}
+              </a>
+              <br />
+              made by <a href="/user/{{ result.user_id }}">{{ result.username }}</a>,
+              {% if result.avg_rating is not none %}
+                average rating: {{ result.avg_rating }}
+              {% else %}
+                has not been reviewed yet
+              {% endif %}
+            </li>
+            <hr />
+          {% endfor %}
+        </ul>
+      </div>
     {% endif %}
-    </li>
-    <hr />
-  {% endfor %}
-  </ul>
-  </div>
-  {% endif %}
-  <div class="pagination">
-  <p>
-    <a href="/{{path}}/{{ page - 1 }}">&lt;&lt;</a>
-    page {{ page }}/{{ page_count }}
-    <a href="/{{path}}/{{ page + 1 }}">&gt;&gt;</a>
-  </p>
-  </div>
-  {% endblock %}
-</body>
+    <div class="pagination">
+      <p>
+        <a href="/{{path}}/{{ page - 1 }}">&lt;&lt;</a>
+        page {{ page }}/{{ page_count }}
+        <a href="/{{path}}/{{ page + 1 }}">&gt;&gt;</a>
+      </p>
+    </div>
+    {% endblock %}
+  </body>

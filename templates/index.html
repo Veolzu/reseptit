@@ -1,88 +1,86 @@
 <!DOCTYPE html>
 <html>
+  <head>
+      <title>Recipes</title>
+  </head>
 
-<head>
-  <title>Recipes</title>
-</head>
+  <body>
+    {% extends "layout.html" %}
 
-<body>
-  {% extends "layout.html" %}
+    {% block title %}Recipes{% endblock %}
+    {% block content %}
+    <hr />
 
-  {% block title %}Recipes{% endblock %}
-  {% block content %}
-  <hr />
-
-  {% if get_flashed_messages() | length > 0 %}
-  <div class="info_messages">
-  {% for message in get_flashed_messages() %}
-  <p>
-    <b>{{ message }}</b>
-  </p>
-  <hr />
-  {% endfor %}
-  </div>
-  {% endif %}
-
-  <div class="recipes">
-
-  {% for recipe in recipes %}
-  <p>
-    <a href="/recipe/{{ recipe.id }}">{{ recipe.title }}</a>
-    <br />
-      made by <a href="/user/{{ recipe.user_id }}">{{ recipe.username }}</a>,
-    {% if recipe.avg_rating is not none %}
-      average rating: {{ recipe.avg_rating }}
-    {% else %}
-      has not been reviewed yet
+    {% if get_flashed_messages() | length > 0 %}
+        <div class="info_messages">
+        {% for message in get_flashed_messages() %}
+            <p>
+              <b>{{ message }}</b>
+            </p>
+            <hr />
+        {% endfor %}
+        </div>
     {% endif %}
-    {% if session.user_id == recipe.user_id %}
-    | <a href="/edit_recipe/{{ recipe.id }}">Edit</a>
-    | <a href="/remove_recipe/{{ recipe.id }}">Delete</a>
+
+    <div class="recipes">
+
+        {% for recipe in recipes %}
+            <p>
+                <a href="/recipe/{{ recipe.id }}">{{ recipe.title }}</a>
+                <br />
+                    made by <a href="/user/{{ recipe.user_id }}">{{ recipe.username }}</a>,
+                {% if recipe.avg_rating is not none %}
+                    average rating: {{ recipe.avg_rating }}
+                {% else %}
+                    has not been reviewed yet
+                {% endif %}
+                
+                {% if session.user_id == recipe.user_id %}
+                | <a href="/edit_recipe/{{ recipe.id }}">Edit</a>
+                | <a href="/remove_recipe/{{ recipe.id }}">Delete</a>
+                {% endif %}
+            </p>
+            <hr />
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        <p>
+            <a href="/{{ page - 1 }}">&lt;&lt;</a>
+            page {{ page }}/{{ page_count }}
+            <a href="/{{ page + 1 }}">&gt;&gt;</a>
+        </p>
+    </div>
+    <hr />
+
+    <div class="new_recipe">
+    {% if session.user_id %}
+        <h2>A new recipe</h2>
+
+        <form action="/new_recipe" method="post">
+            <p>
+                <label for="title">Title</label>:<br />
+                <input type="text" name="title" id = "title" maxlength="100" required/>
+            </p>
+            <p>
+                <label for="content">Recipe</label>:<br />
+                <textarea name="content" rows="5" cols="40" maxlength="5000" required></textarea>
+            </p>
+                {% for class in classes%}
+                    <input type="checkbox" name={{class.title}} value={{class.title}}>
+                    <label for={{class.title}}>{{class.title }}</label><br>
+                {% endfor %}
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+            <input type="submit" value="Submit" />
+        </form>
     {% endif %}
-  </p>
-  <hr />
-  {% endfor %}
-  </div>
-
-  <div class="pagination">
-  <p>
-    <a href="/{{ page - 1 }}">&lt;&lt;</a>
-    page {{ page }}/{{ page_count }}
-    <a href="/{{ page + 1 }}">&gt;&gt;</a>
-  </p>
-  </div>
-  <hr />
-
-  <div class="new_recipe">
-  {% if session.user_id %}
-  <h2>A new recipe</h2>
-
-  <form action="/new_recipe" method="post">
-    <p>
-      <label for="title">Title</label>:<br />
-      <input type="text" name="title" id = "title" maxlength="100" required/>
-    </p>
-    <p>
-      <label for="content">Recipe</label>:<br />
-      <textarea name="content" rows="5" cols="40" maxlength="5000" required></textarea>
-    </p>
-      {% for class in classes%}
-        <input type="checkbox" name={{class.title}} value={{class.title}}>
-        <label for={{class.title}}>{{class.title }}</label><br>
-      {% endfor %}
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" value="Submit" />
-  </form>
-  {% endif %}
-  </div>
-  {% if not session.user_id %}
-  <p>
-    if you want to upload a recipe, please <a href="/login">login</a> first.
-  </p>
-  {% endif %}
-  {% endblock %}
-  
-
-</body>
+    </div>
+    {% if not session.user_id %}
+        <p>
+            if you want to upload a recipe, please <a href="/login">login</a> first.
+        </p>
+      {% endif %}
+    {% endblock %}
+  </body>
 
 </html>

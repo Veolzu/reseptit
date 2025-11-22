@@ -3,32 +3,32 @@
 {% block title %}Upload a profile picture{% endblock %}
 
 {% block content %}
-<div class="auth-container">
-  <h1>Upload a profile picture</h1>
+  <div class="auth-container">
+    <h1>Upload a profile picture</h1>
 
-  {% if get_flashed_messages() | length > 0 %}
-  <div class="info_messages">
-    {% for message in get_flashed_messages() %}
-    <p><b>{{ message }}</b></p>
-    {% endfor %}
-  </div>
-  {% endif %}
+    {% if get_flashed_messages() | length > 0 %}
+      <div class="info_messages">
+        {% for message in get_flashed_messages() %}
+          <p><b>{{ message }}</b></p>
+        {% endfor %}
+      </div>
+    {% endif %}
 
-  <p>Upload a jpg file, max size is 100 kB</p>
+    <p>Upload a jpg file, max size is 100 kB</p>
 
-  <form class="auth-form" action="/add_image" method="post" enctype="multipart/form-data">
-    <label for="image">Picture</label>
-    <input type="file" name="image" id="image" accept=".jpg" />
+    <form class="auth-form" action="/add_image" method="post" enctype="multipart/form-data">
+      <label for="image">Picture</label>
+      <input type="file" name="image" id="image" accept=".jpg" />
 
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
 
-    <div style="margin-top:12px">
-      <input class="btn" type="submit" value="Upload" />
+      <div style="margin-top:12px">
+        <input class="btn" type="submit" value="Upload" />
+      </div>
+    </form>
+
+    <div class="auth-help">
+      <p><a href="/">Back to front page</a></p>
     </div>
-  </form>
-
-  <div class="auth-help">
-    <p><a href="/">Back to front page</a></p>
   </div>
-</div>
 {% endblock %}

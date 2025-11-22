@@ -3,33 +3,33 @@
 {% block title %}Edit review{% endblock %}
 
 {% block content %}
-<div class="edit-container">
-  <h1>Editing the review</h1>
+  <div class="edit-container">
+    <h1>Editing the review</h1>
 
-  {% if get_flashed_messages() | length > 0 %}
-  <div class="info_messages">
-    {% for message in get_flashed_messages() %}
-    <p><b>{{ message }}</b></p>
-    {% endfor %}
+    {% if get_flashed_messages() | length > 0 %}
+      <div class="info_messages">
+        {% for message in get_flashed_messages() %}
+          <p><b>{{ message }}</b></p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form class="auth-form" action="/edit_rating/{{ rating.id }}" method="post">
+      <label for="content">Rating</label>
+      <textarea name="content" id="content" rows="5" maxlength="5000" required>{{ rating.content }}</textarea>
+
+      <label for="dropdown">Review the recipe 1-10 (10 being the best)</label>
+      <select name="dropdown" id="dropdown">
+        {% for i in range(1,11) %}
+          <option value="{{ i }}" {% if rating.rating is defined and rating.rating == i %}selected{% endif %}>{{ i }}</option>
+        {% endfor %}
+      </select>
+
+      <input type="hidden" name="rating_id" value="{{ rating.id }}" />
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <div style="margin-top:12px">
+        <input class="btn" type="submit" value="Save" />
+      </div>
+    </form>
   </div>
-  {% endif %}
-
-  <form class="auth-form" action="/edit_rating/{{ rating.id }}" method="post">
-    <label for="content">Rating</label>
-    <textarea name="content" id="content" rows="5" maxlength="5000" required>{{ rating.content }}</textarea>
-
-    <label for="dropdown">Review the recipe 1-10 (10 being the best)</label>
-    <select name="dropdown" id="dropdown">
-      {% for i in range(1,11) %}
-        <option value="{{ i }}" {% if rating.rating is defined and rating.rating == i %}selected{% endif %}>{{ i }}</option>
-      {% endfor %}
-    </select>
-
-    <input type="hidden" name="rating_id" value="{{ rating.id }}" />
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <div style="margin-top:12px">
-      <input class="btn" type="submit" value="Save" />
-    </div>
-  </form>
-</div>
 {% endblock %}

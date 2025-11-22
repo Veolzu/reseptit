@@ -1,73 +1,71 @@
-
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>User {{ user.username }}</title>
+  </head>
 
-<head>
-  <title>User {{ user.username }}</title>
-</head>
+  {% extends "layout.html" %}
 
-{% extends "layout.html" %}
+  {% block title %}User {{ user.username }}{% endblock %}
+  {% block content %}
 
-{% block title %}User {{ user.username }}{% endblock %}
-{% block content %}
+  <body>
+    {% if get_flashed_messages() | length > 0 %}
+      <div class="info_messages">
+      {% for message in get_flashed_messages() %}
+        <p>
+          <b>{{ message }}</b>
+        </p>
+        <hr />
+      {% endfor %}
+      </div>
+    {% endif %}
+    <h1>User {{ user.username }}</h1>
 
-<body>
-  {% if get_flashed_messages() | length > 0 %}
-  <div class="info_messages">
-  {% for message in get_flashed_messages() %}
-  <p>
-    <b>{{ message }}</b>
-  </p>
-  <hr />
-  {% endfor %}
-  </div>
-  {% endif %}
-  <h1>User {{ user.username }}</h1>
+    {% if user.has_image %}
+      <div class="profile_picture">
+        <img src="/image/{{ user.id }}" alt="User's {{ user.username }} profile picture" />
+      </div>
+    {% endif %}
 
-  {% if user.has_image %}
-  <div class="profile_picture">
-  <img src="/image/{{ user.id }}" alt="User's {{ user.username }} profile picture" />
-  </div>
-  {% endif %}
-
-  {% if user.id == session.user_id %}
-  <p>
-    <a href="/add_image">Upload a profile picture</a>
-  </p>
-  {% endif %}
-  <p>
-    {% if recipes is not none %}
-    User has created a total of {{ recipe_count }} different recipes
-    {% else %}
-    User has not yet published a recipe
-    {%endif%}
-
-  </p>
-  <div class="recipes">
-  <h2>Recipes</h2>
-  <ul>
-  {% for recipe in recipes %}
-    <li>
-      <a href="/recipe/{{ recipe.id }}">
-        {{ recipe.title }}
-      </a>
-      {% if recipe.avg_rating is not none %}
-        average rating: {{ recipe.avg_rating }}
+    {% if user.id == session.user_id %}
+      <p>
+        <a href="/add_image">Upload a profile picture</a>
+      </p>
+    {% endif %}
+    <p>
+      {% if recipes is not none %}
+        User has created a total of {{ recipe_count }} different recipes
       {% else %}
-        has not been reviewed yet
-      {% endif %}
-      <br />
-    </li>  
-  {% endfor %}
-  </ul>
-  </div>
-  <div class="pagination">
-  <p>
-    <a href="/user/{{user.id}}/{{ page - 1 }}">&lt;&lt;</a>
-    page {{ page }}/{{ page_count }}
-    <a href="/user/{{user.id}}/{{ page + 1 }}">&gt;&gt;</a>
-  </p>
-  </div>
-</body>
-{% endblock %}
+        User has not yet published a recipe
+      {%endif%}
+
+    </p>
+    <div class="recipes">
+      <h2>Recipes</h2>
+      <ul>
+        {% for recipe in recipes %}
+          <li>
+            <a href="/recipe/{{ recipe.id }}">
+              {{ recipe.title }}
+            </a>
+            {% if recipe.avg_rating is not none %}
+              average rating: {{ recipe.avg_rating }}
+            {% else %}
+              has not been reviewed yet
+            {% endif %}
+            <br />
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="pagination">
+      <p>
+        <a href="/user/{{user.id}}/{{ page - 1 }}">&lt;&lt;</a>
+        page {{ page }}/{{ page_count }}
+        <a href="/user/{{user.id}}/{{ page + 1 }}">&gt;&gt;</a>
+      </p>
+    </div>
+  </body>
+  {% endblock %}
 </html>

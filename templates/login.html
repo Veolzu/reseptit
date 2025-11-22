@@ -3,37 +3,37 @@
 {% block title %}Log in{% endblock %}
 
 {% block content %}
-<div class="auth-container">
-  <h1>Log in</h1>
+  <div class="auth-container">
+    <h1>Log in</h1>
 
-  {% if get_flashed_messages() | length > 0 %}
-  <div class="info_messages">
-    {% for message in get_flashed_messages() %}
-    <p><b>{{ message }}</b></p>
-    {% endfor %}
-  </div>
-  {% endif %}
-
-  <form class="auth-form" action="/login" method="post" autocomplete="on">
-    <label for="username">Username</label>
-    <input type="text" name="username" id="username" value="{{ filled.username }}" maxlength="16" required />
-
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required />
-
-    {% if next_page %}
-      <input type="hidden" name="next_page" value="{{ next_page }}" />
-    {% else %}
-      <input type="hidden" name="next_page" value="/" />
+    {% if get_flashed_messages() | length > 0 %}
+      <div class="info_messages">
+        {% for message in get_flashed_messages() %}
+          <p><b>{{ message }}</b></p>
+        {% endfor %}
+      </div>
     {% endif %}
 
-    <input class="btn" type="submit" value="Log in" />
-  </form>
+    <form class="auth-form" action="/login" method="post" autocomplete="on">
+      <label for="username">Username</label>
+      <input type="text" name="username" id="username" value="{{ filled.username }}" maxlength="16" required />
 
-  <div class="auth-help">
-    <p>
-      <a href="/">Back to front page</a> | <a href="/register">Register</a>
-    </p>
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" required />
+
+      {% if next_page %}
+        <input type="hidden" name="next_page" value="{{ next_page }}" />
+      {% else %}
+        <input type="hidden" name="next_page" value="/" />
+      {% endif %}
+
+      <input class="btn" type="submit" value="Log in" />
+    </form>
+
+    <div class="auth-help">
+      <p>
+        <a href="/">Back to front page</a> | <a href="/register">Register</a>
+      </p>
+    </div>
   </div>
-</div>
 {% endblock %}
