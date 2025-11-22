@@ -17,7 +17,7 @@
       </p>
       made by <a href="/user/{{ recipe.user_id }}">{{ recipe.username }}</a>,
       {% if recipe.avg_rating is not none %}
-        average rating: {{ recipe.avg_rating }}
+        average rating: {{ recipe.avg_rating }}/10
       {% else %}
         has not been reviewed yet
       {% endif %}

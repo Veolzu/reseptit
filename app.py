@@ -162,7 +162,6 @@ def edit_recipe(recipe_id):
     all_classes = recipe_book.get_all_classes()
     selected_classes = recipe_book.get_classes_of_recipe(recipe_id)
     selected_classes = [elem["title"] for elem in selected_classes]
-    print(selected_classes)
     if recipe["user_id"] != session["user_id"]:
         forbidden()
         
@@ -182,7 +181,6 @@ def edit_recipe(recipe_id):
                 classes.append(request.form[elem["title"]])
             except KeyError:
                 continue
-        print(classes)
         for title in classes:
             recipe_book.add_recipe_class(recipe_id, title)
         return redirect("/recipe/" + str(recipe_id))
@@ -251,7 +249,6 @@ def search(page=1):
         query = ""
     else:
         query = request.args.get("query").split("/")[0]
-    print(query)
     classes = []
     tags = request.full_path.split("&")[1:]
 

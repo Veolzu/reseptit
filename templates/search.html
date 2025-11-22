@@ -45,7 +45,7 @@
               <br />
               made by <a href="/user/{{ result.user_id }}">{{ result.username }}</a>,
               {% if result.avg_rating is not none %}
-                average rating: {{ result.avg_rating }}
+                average rating: {{ result.avg_rating }}/10
               {% else %}
                 has not been reviewed yet
               {% endif %}

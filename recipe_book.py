@@ -69,7 +69,7 @@ def set_average_rating(recipe_id):
         sum = 0
         for review in ratings:
             sum += review["rating"]
-        average = sum / len(ratings)
+        average = round(sum / len(ratings), 2)
         sql = "UPDATE recipes SET avg_rating = ? WHERE id = ?"
         db.execute(sql, [average, recipe_id])
     else:
