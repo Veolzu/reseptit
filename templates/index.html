@@ -6,29 +6,25 @@
 </head>
 
 <body>
-  <h1>Recipes</h1>
+  {% extends "layout.html" %}
 
-  <p>
-    <a href="/search">Search</a> |
-    {% if session.user_id %}
-    <a href="/logout">Log out</a> |
-    <a href="/user/{{ session.user_id }}">Profile page</a>
-
-    {% else %}
-    <a href="/register">Create an account</a> |
-    <a href="/login">Log in</a>
-    {% endif %}
-  </p>
-  {% if session.user_id %}
-    you are logged in as <a href="/user/{{ session.user_id }}">{{ session.username }}</a>
-  {% endif %}
+  {% block title %}Recipes{% endblock %}
+  {% block content %}
   <hr />
+
+  {% if get_flashed_messages() | length > 0 %}
+  <div class="info_messages">
   {% for message in get_flashed_messages() %}
   <p>
     <b>{{ message }}</b>
   </p>
   <hr />
   {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="recipes">
+
   {% for recipe in recipes %}
   <p>
     <a href="/recipe/{{ recipe.id }}">{{ recipe.title }}</a>
@@ -46,14 +42,18 @@
   </p>
   <hr />
   {% endfor %}
+  </div>
 
+  <div class="pagination">
   <p>
     <a href="/{{ page - 1 }}">&lt;&lt;</a>
     page {{ page }}/{{ page_count }}
     <a href="/{{ page + 1 }}">&gt;&gt;</a>
   </p>
+  </div>
   <hr />
 
+  <div class="new_recipe">
   {% if session.user_id %}
   <h2>A new recipe</h2>
 
@@ -75,7 +75,8 @@
   
   </form>
   {% endif %}
-
+  </div>
+  {% endblock %}
   
 
 </body>

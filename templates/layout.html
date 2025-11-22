@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="/static/main.css">
+</head>
+
+<body>
+  <div class="header">
+    <h1>Savor & Share</h1>
+    <p>The only recipe book you will ever need</p>
+  </div>
+  <div class="nav">
+    <nav>
+        <p>
+        <a href="/">Front page</a> |
+        <a href="/search">Search</a> |
+        <a href="/register">Register</a> |
+        {% if session.user_id %}
+        <a href="/user/{{ session.user_id }}">Profile page</a> |
+
+        <a href="/logout">Log out</a> |
+        {% else %}
+        <a href="/login">Log in</a> |
+        {% endif %}
+        </p>
+      {% if session.user_id %}
+        <p>
+            you are logged in as <a href="/user/{{ session.user_id }}">{{ session.username }}</a>
+        </p>
+      {% endif %}
+    </nav>
+  </div>
+
+  <div class="content">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+
+</html>
