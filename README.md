@@ -1,5 +1,5 @@
-# reseptit
-A website where users can share their recipes and discover new ones.
+# Shavor & Share
+The only online recipe book you will ever need.
 
 Functionality:
 
@@ -12,7 +12,7 @@ Functionality:
 - The user will be able to leave a comment and a rating for the recipe. While viewing the recipe, the user will be able to see the comments & the average rating.
 
 
-Installation Guide:
+# Installation Guide:
 
 1. Clone the repository
 2. Make an virtual environment by opening the console in the same directory and using the following command
@@ -35,16 +35,16 @@ Installation Guide:
      flask run
 
 
-Testing large amounts of data:
+# Testing large amounts of data:
 
 seed.py is a script that generates a 1000 users, 10 000 recipes and 100 000 ratings generated at random. Each recipe has a random letter from the alphabet as the content. Each recipe is assigned at random 0-3 classes. However purposefully the mexican tag is left out of the generated data, so testing the search function is easier (when selecting the mexican tag with the generated data, no results should ever appear).
 
 Results with a thousand users, million recipes (each recipe has a random number of 0-101 ratings generated) as per seed.py file:
 without any indexes:
--loading the front page: roughly 0.10 - 0.3s
--loading a recipe: 3.7s-4s
--loading a user's profile: 0.1s
--search: 1-2s
+1. loading the front page: roughly 0.10 - 0.3s
+2. loading a recipe: 3.7s-4s
+3. loading a user's profile: 0.1s
+4. search: 1-2s
 
 the biggest problem with loading the recipe is searching the ratings belonging to the recipe. This can be improved with a index on ratings by recipe_id. After that loading a recipe's page is reduced to rougly 0.1s.
 
