@@ -22,12 +22,14 @@
     <textarea name="content" id="content" rows="6" maxlength="5000" required>{{ recipe.content }}</textarea>
 
     <div class="form-classes">
-      {% for class in classes %}
-        <label class="class-item">
-          <input type="checkbox" name="{{ class.title }}" value="{{ class.title }}"
-            {% if class.title in (recipe_classes|default([])) %}checked{% endif %} />
-          {{ class.title }}
-        </label>
+      {% for class in classes%}
+        {% if class.title in selected_classes%}
+        <input type="checkbox" name={{class.title}} id={{class.title}} value={{class.title}} checked>
+        <label for={{class.title}}>{{class.title}}</label><br>
+        {% else %}
+        <input type="checkbox" name={{class.title}} id={{class.title}} value={{class.title}}>
+        <label for={{class.title}}>{{class.title }}</label><br>
+        {% endif %}
       {% endfor %}
     </div>
 

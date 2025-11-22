@@ -160,11 +160,14 @@ def edit_recipe(recipe_id):
     require_login()
     recipe = recipe_book.get_recipe(recipe_id)
     all_classes = recipe_book.get_all_classes()
+    selected_classes = recipe_book.get_classes_of_recipe(recipe_id)
+    selected_classes = [elem["title"] for elem in selected_classes]
+    print(selected_classes)
     if recipe["user_id"] != session["user_id"]:
         forbidden()
         
     if request.method == "GET":
-        return render_template("edit_recipe.html", recipe=recipe, classes=all_classes)
+        return render_template("edit_recipe.html", recipe=recipe, classes=all_classes, selected_classes=selected_classes)
 
     if request.method == "POST":
         check_csrf(request)
