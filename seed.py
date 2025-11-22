@@ -29,16 +29,20 @@ for i in range(1, recipe_count + 1):
     for indice in class_indices:
         sql = "INSERT INTO recipe_classes (recipe_id, title) VALUES (?, ?)"
         data.execute(sql, [i, classes[indice]])
-#rating
-for i in range(1, rating_count + 1):
-    user_id = random.randint(1, user_count)
-    thread_id = random.randint(1, recipe_count)
-    rating = random.randint(1, 10)
-    data.execute("""INSERT INTO ratings (content, rating, user_id, recipe_id)
-                  VALUES (?, ?, ?, ?)""",
-               ["message" + str(i), rating,  user_id, thread_id])
-
-
+    sum = 0
+    n=random.randint(0, 17)
+    for j in range(0, n):
+        user_id = random.randint(1, user_count)
+        recipe_id = i
+        rating = random.randint(1, 10)
+        data.execute("""INSERT INTO ratings (content, rating, user_id, recipe_id)
+                    VALUES (?, ?, ?, ?)""",
+                ["message" + str(i), rating,  user_id, recipe_id])
+        sum += rating
+    if n > 0:
+        average = round(sum / n, 2)
+        sql = "UPDATE recipes SET avg_rating = ? WHERE id = ?"
+        data.execute(sql, [average, i])
 data.commit()
 data.close()
 
