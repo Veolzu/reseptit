@@ -48,4 +48,5 @@ without any indexes:
 
 the biggest problem with loading the recipe is searching the ratings belonging to the recipe. This can be improved with a index on ratings by recipe_id. After that loading a recipe's page is reduced to rougly 0.1s.
 
+As per my current testing, the search function is unlikely to be largely speeded up by indexes (the for-loops are likely to be the problem, not the sql queries)
 
