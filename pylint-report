@@ -1,79 +1,5 @@
 # pylint-report
 
-```
-pylint: Command line or configuration file:1: UserWarning: 'BaseException' is not a proper value for the 'overgeneral-exceptions' option. Use fully qualified name (maybe 'builtins.BaseException' ?) instead. This will cease to be checked at runtime when the configuration upgrader is released.
-pylint: Command line or configuration file:1: UserWarning: 'Exception' is not a proper value for the 'overgeneral-exceptions' option. Use fully qualified name (maybe 'builtins.Exception' ?) instead. This will cease to be checked at runtime when the configuration upgrader is released.
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'print-statement' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'parameter-unpacking' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'unpacking-in-except' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'old-raise-syntax' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'backtick' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'import-star-module-level' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'apply-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'basestring-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'buffer-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'cmp-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'coerce-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'execfile-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'file-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'long-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'raw_input-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'reduce-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'standarderror-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'unicode-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'xrange-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'coerce-method' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'delslice-method' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'getslice-method' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'setslice-method' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'no-absolute-import' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'old-division' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'dict-iter-method' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'dict-view-method' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'next-method-called' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'metaclass-assignment' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'indexing-exception' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'raising-string' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'reload-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'oct-method' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'hex-method' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'nonzero-method' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'cmp-method' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'input-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'round-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'intern-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'unichr-builtin' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'map-builtin-not-iterating' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'zip-builtin-not-iterating' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'range-builtin-not-iterating' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'filter-builtin-not-iterating' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'using-cmp-argument' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'div-method' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'idiv-method' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'rdiv-method' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'exception-message-attribute' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'invalid-str-codec' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'sys-max-int' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'bad-python3-import' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'deprecated-string-function' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'deprecated-str-translate-call' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'deprecated-itertools-function' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'deprecated-types-field' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'next-method-defined' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'dict-items-not-iterating' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'dict-keys-not-iterating' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'dict-values-not-iterating' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'deprecated-operator-function' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'deprecated-urllib-function' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'xreadlines-attribute' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'deprecated-sys-function' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'exception-escape' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: R0022: Useless option value for '--disable', 'comprehension-escape' was removed from pylint, see https://github.com/pylint-dev/pylint/pull/4942. (useless-option-value)
-C:\Users\Veemies\.pylintrc:1:0: W0012: Unknown option value for '--disable', expected a valid pylint message and got 'long-suffix' (unknown-option-value)
-C:\Users\Veemies\.pylintrc:1:0: W0012: Unknown option value for '--disable', expected a valid pylint message and got 'old-ne-operator' (unknown-option-value)
-C:\Users\Veemies\.pylintrc:1:0: W0012: Unknown option value for '--disable', expected a valid pylint message and got 'old-octal-literal' (unknown-option-value)
-C:\Users\Veemies\.pylintrc:1:0: W0012: Unknown option value for '--disable', expected a valid pylint message and got 'non-ascii-bytes-literal' (unknown-option-value)
-C:\Users\Veemies\.pylintrc:1:0: W0012: Unknown option value for '--disable', expected a valid pylint message and got 'eq-without-hash' (unknown-option-value)
 ************* Module app
 app.py:58:37: C0303: Trailing whitespace (trailing-whitespace)
 app.py:155:0: C0301: Line too long (124/100) (line-too-long)
@@ -120,8 +46,86 @@ app.py:318:0: C0116: Missing function or method docstring (missing-function-docs
 app.py:331:0: C0116: Missing function or method docstring (missing-function-docstring)
 app.py:346:0: C0116: Missing function or method docstring (missing-function-docstring)
 app.py:350:0: C0116: Missing function or method docstring (missing-function-docstring)
-
 ------------------------------------------------------------------
 Your code has been rated at 8.37/10 (previous run: 8.37/10, +0.00)
 
-```
+************* Module users
+users.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+users.py:4:0: C0116: Missing function or method docstring (missing-function-docstring)
+users.py:9:0: C0116: Missing function or method docstring (missing-function-docstring)
+users.py:20:0: C0116: Missing function or method docstring (missing-function-docstring)
+users.py:28:0: C0116: Missing function or method docstring (missing-function-docstring)
+users.py:32:0: C0116: Missing function or method docstring (missing-function-docstring)
+------------------------------------------------------------------
+Your code has been rated at 7.60/10 (previous run: 7.20/10, +0.40)
+
+
+************* Module recipe_book
+recipe_book.py:16:0: C0303: Trailing whitespace (trailing-whitespace)
+recipe_book.py:33:0: C0303: Trailing whitespace (trailing-whitespace)
+recipe_book.py:78:0: C0303: Trailing whitespace (trailing-whitespace)
+recipe_book.py:98:0: C0303: Trailing whitespace (trailing-whitespace)
+recipe_book.py:121:0: C0303: Trailing whitespace (trailing-whitespace)
+recipe_book.py:135:13: C0303: Trailing whitespace (trailing-whitespace)
+recipe_book.py:141:0: C0301: Line too long (193/100) (line-too-long)
+recipe_book.py:170:0: C0304: Final newline missing (missing-final-newline)
+recipe_book.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+recipe_book.py:2:0: C0116: Missing function or method docstring (missing-function-docstring)
+recipe_book.py:9:0: C0116: Missing function or method docstring (missing-function-docstring)
+recipe_book.py:21:0: C0116: Missing function or method docstring (missing-function-docstring)
+recipe_book.py:28:0: C0116: Missing function or method docstring (missing-function-docstring)
+recipe_book.py:34:0: C0116: Missing function or method docstring (missing-function-docstring)
+recipe_book.py:42:0: C0116: Missing function or method docstring (missing-function-docstring)
+recipe_book.py:51:0: C0116: Missing function or method docstring (missing-function-docstring)
+recipe_book.py:57:0: C0116: Missing function or method docstring (missing-function-docstring)
+recipe_book.py:66:0: C0116: Missing function or method docstring (missing-function-docstring)
+recipe_book.py:69:8: W0622: Redefining built-in 'sum' (redefined-builtin)
+recipe_book.py:79:0: C0116: Missing function or method docstring (missing-function-docstring)
+recipe_book.py:84:0: C0116: Missing function or method docstring (missing-function-docstring)
+recipe_book.py:91:0: C0116: Missing function or method docstring (missing-function-docstring)
+recipe_book.py:102:0: C0116: Missing function or method docstring (missing-function-docstring)
+recipe_book.py:109:0: C0116: Missing function or method docstring (missing-function-docstring)
+recipe_book.py:109:0: R0912: Too many branches (14/12) (too-many-branches)
+recipe_book.py:110:4: W0612: Unused variable 'offset' (unused-variable)
+recipe_book.py:160:0: C0116: Missing function or method docstring (missing-function-docstring)
+recipe_book.py:164:0: C0116: Missing function or method docstring (missing-function-docstring)
+recipe_book.py:168:0: C0116: Missing function or method docstring (missing-function-docstring)
+-----------------------------------
+Your code has been rated at 7.48/10
+
+
+************* Module config
+config.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+config.py:1:0: C0103: Constant name "secret_key" doesn't conform to UPPER_CASE naming style (invalid-name)
+-----------------------------------------------------------------------
+Your code has been rated at -10.00/10 (previous run: -20.00/10, +10.00)
+
+
+************* Module db
+db.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+db.py:4:0: C0116: Missing function or method docstring (missing-function-docstring)
+db.py:10:0: C0116: Missing function or method docstring (missing-function-docstring)
+db.py:10:0: W0102: Dangerous default value [] as argument (dangerous-default-value)
+db.py:18:0: C0116: Missing function or method docstring (missing-function-docstring)
+db.py:18:0: W0102: Dangerous default value [] as argument (dangerous-default-value)
+db.py:24:0: C0116: Missing function or method docstring (missing-function-docstring)
+------------------------------------------------------------------
+Your code has been rated at 6.50/10 (previous run: 6.00/10, +0.50)
+
+************* Module seed
+seed.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+
+------------------------------------------------------------------
+Your code has been rated at 9.71/10 (previous run: 9.41/10, +0.29)
+
+
+# Analyzing the findings:
+
+## docstrings
+Most of the findings are of the following type:
+
+app.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+app.py:17:0: C0116: Missing function or method docstring (missing-function-docstring)
+
+These mean that the modules and functions lack docstring comments. This was a conscious decision made by the developer.
+
