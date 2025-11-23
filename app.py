@@ -4,13 +4,13 @@ import time
 import secrets
 import markupsafe
 
-from flask import g
-from flask import Flask
-from flask import redirect, abort, render_template, request, session, flash, make_response
-import config, users, recipe_book
+from flask import Flask, redirect, abort, render_template, request, session, flash, make_response, g
+import config
+import users
+import recipe_book
 
 app = Flask(__name__)
-app.secret_key = config.secret_key
+app.secret_key = config.SECRET_KEY
 
 @app.template_filter()
 def show_lines(content):
@@ -28,8 +28,8 @@ def require_login():
     if "user_id" not in session:
         forbidden()
 
-def check_csrf(request):
-    if request.form["csrf_token"] != session["csrf_token"]:
+def check_csrf(req):
+    if req.form["csrf_token"] != session["csrf_token"]:
         forbidden()
 
 
@@ -55,7 +55,7 @@ def register():
         try:
             users.create_user(username, password1)
             flash("Registration was succesful, you can now log in")
-            return redirect("/login")            
+            return redirect("/login")
         except sqlite3.IntegrityError:
             flash("Error: username is already taken")
             return render_template("register.html", filled=filled)
@@ -79,10 +79,9 @@ def login():
             session["username"] = username
             flash("login successful!")
             return redirect(next_page)
-        else:
-            filled = {"username": username}
-            flash("Error: Incorrect username or password")
-            return render_template("login.html", next_page=request.referrer, filled=filled)
+        filled = {"username": username}
+        flash("Error: Incorrect username or password")
+        return render_template("login.html", next_page=request.referrer, filled=filled)
 @app.route("/logout")
 def logout():
     del session["user_id"]
@@ -152,7 +151,8 @@ def show_recipe(recipe_id, page=1):
     if page > page_count:
         return redirect("/recipe/" + str(recipe_id) + "/" + str(page_count))
     ratings = ratings[(page-1)*page_size:page*page_size]
-    return render_template("recipe.html", recipe=recipe, ratings=ratings, classes=classes, page=page, page_count=page_count)
+    return render_template("recipe.html", recipe=recipe, ratings=ratings,
+                            classes=classes, page=page, page_count=page_count)
 
 
 @app.route("/edit_recipe/<int:recipe_id>", methods=["GET", "POST"])
@@ -164,9 +164,10 @@ def edit_recipe(recipe_id):
     selected_classes = [elem["title"] for elem in selected_classes]
     if recipe["user_id"] != session["user_id"]:
         forbidden()
-        
+
     if request.method == "GET":
-        return render_template("edit_recipe.html", recipe=recipe, classes=all_classes, selected_classes=selected_classes)
+        return render_template("edit_recipe.html", recipe=recipe, classes=all_classes,
+                                selected_classes=selected_classes)
 
     if request.method == "POST":
         check_csrf(request)
@@ -184,7 +185,7 @@ def edit_recipe(recipe_id):
         for title in classes:
             recipe_book.add_recipe_class(recipe_id, title)
         return redirect("/recipe/" + str(recipe_id))
-    
+
 @app.route("/remove_recipe/<int:recipe_id>", methods=["GET", "POST"])
 def remove_recipe(recipe_id):
     require_login()
@@ -199,7 +200,7 @@ def remove_recipe(recipe_id):
         if "continue" in request.form:
             recipe_book.remove_recipe(recipe["id"])
         return redirect("/")
-    
+
 
 
 @app.route("/edit_rating/<int:rating_id>", methods=["GET", "POST"])
@@ -219,7 +220,7 @@ def edit_rating(rating_id):
             forbidden()
         recipe_book.update_rating(rating_id, content, rating_num)
         return redirect("/recipe/" + str(rating["recipe_id"]))
-    
+
 @app.route("/remove_rating/<int:rating_id>", methods=["GET", "POST"])
 def remove_rating(rating_id):
     require_login()
@@ -266,9 +267,10 @@ def search(page=1):
     if page < 1:
         return redirect(path+"/1")
     if page > page_count:
-        return redirect(path+"/"+str(page_count))    
+        return redirect(path+"/"+str(page_count))
 
-    return render_template("search.html", query=query, results=results, all_classes=all_classes, classes=classes, page=page, page_count=page_count, path=path)
+    return render_template("search.html", query=query, results=results, all_classes=all_classes,
+                           classes=classes, page=page, page_count=page_count, path=path)
 
 
 
@@ -288,7 +290,8 @@ def show_user(user_id, page=1):
     if page > page_count:
         return redirect("/user/" + str(user_id) + "/" + str(page_count))
     recipes = recipes[(page-1)*page_size:page*page_size]
-    return render_template("user.html", user=user, recipes=recipes, page=page, page_count=page_count, recipe_count=recipe_count)
+    return render_template("user.html", user=user, recipes=recipes,
+                           page=page, page_count=page_count, recipe_count=recipe_count)
 
 @app.route("/add_image", methods=["GET", "POST"])
 def add_image():
@@ -303,12 +306,12 @@ def add_image():
         file = request.files["image"]
         if not file.filename.endswith(".jpg"):
             flash("ERROR: wrong file type")
-            return redirect("/user/" + str(user_id))
+            return redirect("/add_image")
 
         image = file.read()
         if len(image) > 100 * 1024:
             flash("ERROR: file too large")
-            return redirect("/user/" + str(user_id))
+            return redirect("/add_image")
 
         users.update_image(user_id, image)
         flash("The upload was succesful!")
@@ -339,7 +342,8 @@ def index(page=1):
         return redirect("/1")
     if page > page_count:
         return redirect("/" + str(page_count))
-    return render_template("index.html", recipes=recipes, classes=classes, page=page, page_count=page_count)
+    return render_template("index.html", recipes=recipes, classes=classes,
+                            page=page, page_count=page_count)
 
 
 @app.before_request

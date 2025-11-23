@@ -13,7 +13,6 @@ def get_recipes(page, page_size):
              GROUP BY t.id
              ORDER BY t.id DESC
              LIMIT ? OFFSET ?"""
-    
     limit = page_size
     offset = page_size * (page - 1)
     return db.query(sql, [limit, offset])
@@ -30,7 +29,7 @@ def add_recipe(title, content, user_id):
     db.execute(sql, [title, content, user_id])
     recipe_id = db.last_insert_id()
     return recipe_id
-    
+
 def add_rating(content, rating, user_id, recipe_id):
     sql = """INSERT INTO ratings (content, rating, user_id, recipe_id)
              VALUES (?, ?, ?, ?)"""
@@ -66,16 +65,16 @@ def get_rating(rating_id):
 def set_average_rating(recipe_id):
     ratings = get_ratings(recipe_id)
     if len(ratings) > 0:
-        sum = 0
+        the_sum = 0
         for review in ratings:
-            sum += review["rating"]
-        average = round(sum / len(ratings), 2)
+            the_sum += review["rating"]
+        average = round(the_sum / len(ratings), 2)
         sql = "UPDATE recipes SET avg_rating = ? WHERE id = ?"
         db.execute(sql, [average, recipe_id])
     else:
         sql = "UPDATE recipes SET avg_rating = NULL WHERE id = ?"
         db.execute(sql, [recipe_id])
-    
+
 def update_recipe(recipe_id, title, content):
     sql = "UPDATE recipes SET content = ?, title = ? WHERE id = ?"
     db.execute(sql, [content, title, recipe_id])
@@ -95,7 +94,6 @@ def remove_recipe(recipe_id):
 
     sql = "DELETE FROM recipe_classes WHERE recipe_id = ?"
     db.execute(sql, [recipe_id])
-    
     sql = "DELETE FROM recipes WHERE id = ?"
     db.execute(sql, [recipe_id])
 
@@ -105,46 +103,57 @@ def remove_rating(rating_id):
     db.execute(sql, [rating_id])
     set_average_rating(recipe_id)
 
+def search_with_only_classes(classes, results):
+    for tag in classes:
+        sql="""
+            SElECT c.recipe_id, c.title as class, r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
+            FROM recipe_classes c, recipes r, users u
+            WHERE c.recipe_id = r.id AND c.title like ? and r.user_id = u.id"""
+        promising = db.query(sql, [str(tag)])
+        for result in promising:
+            if result["recipe_id"] not in results:
+                results[result["recipe_id"]] = 0
+            results[result["recipe_id"]] += 1
+    return promising
+def search_with_only_query(query):
+    like = "%" + query + "%"
+    sql="""
+        SElECT  r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
+        FROM recipes r, users u
+        WHERE r.user_id = u.id AND (r.title LIKE ? OR r.content LIKE ?) """
+    true_results = db.query(sql, [like, like])
+    return true_results
 
+def search_with_both(query, classes, results):
+    like = "%" + query + "%"
+    for tag in classes:
+        sql="""
+            SElECT c.recipe_id, c.title as class, r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
+            FROM recipe_classes c, recipes r, users u
+            WHERE (c.recipe_id = r.id AND c.title like ? 
+            AND r.user_id = u.id AND r.title LIKE ?)
+                OR (c.recipe_id = r.id AND c.title like ? 
+                AND r.user_id = u.id AND r.content LIKE ?)"""
+        promising = db.query(sql, [str(tag), like, str(tag), like])
+        for result in promising:
+            if result["recipe_id"] not in results:
+                results[result["recipe_id"]] = 0
+            results[result["recipe_id"]] += 1
+    return promising
 def search(query, classes, page, page_size):
-    offset = page_size * (page) - 1
     true_results = []
     results = {}
     ids = set()
+    promising = []
     if query != "" and len(classes) == 0:
-        like = "%" + query + "%"
-        sql="""
-            SElECT  r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
-            FROM recipes r, users u
-            WHERE r.user_id = u.id AND (r.title LIKE ? OR r.content LIKE ?) """
-        true_results = db.query(sql, [like, like])
-        
+        true_results = search_with_only_query(query)
+
+    elif query == "" and len(classes) > 0:
+        promising = search_with_only_classes(classes, results)
     else:
-        if query == "" and len(classes) > 0:
-            for tag in classes:
-                sql="""
-                    SElECT c.recipe_id, c.title as class, r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
-                    FROM recipe_classes c, recipes r, users u
-                    WHERE c.recipe_id = r.id AND c.title like ? and r.user_id = u.id"""
-                promising = db.query(sql, [str(tag)])
-                for result in promising:
-                    if result["recipe_id"] not in results:
-                        results[result["recipe_id"]] = 0
-                    results[result["recipe_id"]] += 1
+        promising = search_with_both(query, classes, results)
 
-        else:   
-            like = "%" + query + "%"
-            for tag in classes:
-                sql="""
-                    SElECT c.recipe_id, c.title as class, r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
-                    FROM recipe_classes c, recipes r, users u
-                    WHERE (c.recipe_id = r.id AND c.title like ? AND r.user_id = u.id AND r.title LIKE ?) OR (c.recipe_id = r.id AND c.title like ? AND r.user_id = u.id AND r.content LIKE ?)"""
-                promising = db.query(sql, [str(tag), like, str(tag), like])
-                for result in promising:
-                    if result["recipe_id"] not in results:
-                        results[result["recipe_id"]] = 0
-                    results[result["recipe_id"]] += 1
-
+    if promising:
         for result in promising:
             if results[result["recipe_id"]] == len(classes):
                 if result["recipe_id"] not in ids:
