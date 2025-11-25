@@ -46,7 +46,7 @@ flask run
 
 seed.py is a script that generates a 1000 users and a million recipes. Each recipe has a random letter from the alphabet as the content. Each recipe also has a random amount (between 0 and 101) of generated reviews. Each recipe is assigned at random 0-3 classes. However purposefully the mexican tag is left out of the generated data, so testing the search function is easier (when selecting the mexican tag with the generated data, no results should ever appear).
 
-Note: running the seed.py file with a 1000 users and a million recipes will take long, with my school laptop it took around 11 minutes. However with a 1000 users and only a 100 000 recipes, the script took only around a minute. 
+Note: running the seed.py file with a 1000 users and a million recipes will take long, with my school laptop it took around 11 minutes. However with a 1000 users and only a 100 000 recipes, the script took around a minute. 
 
 Results with a thousand users, million recipes (each recipe has a random number of 0-101 ratings generated) as per seed.py file:
 without any indexes:
