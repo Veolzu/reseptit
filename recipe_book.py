@@ -18,7 +18,7 @@ def get_recipes(page, page_size):
     offset = page_size * (page - 1)
     return db.query(sql, [limit, offset])
 
-def get_recipes_by_user(user_id):
+def get_users_recipes(user_id):
     sql = """SELECT id, title, user_id, avg_rating
              FROM recipes
              WHERE user_id = ?"""
@@ -108,7 +108,7 @@ def remove_rating(rating_id):
     db.execute(sql, [rating_id])
     set_average_rating(recipe_id)
 
-def search_with_only_classes(classes, results):
+def search_classes(classes, results):
     for tag in classes:
         sql="""
             SElECT c.recipe_id, c.title as class, r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
@@ -120,7 +120,7 @@ def search_with_only_classes(classes, results):
                 results[result["recipe_id"]] = 0
             results[result["recipe_id"]] += 1
     return promising
-def search_with_only_query(query):
+def search_query(query):
     like = "%" + query + "%"
     sql="""
         SElECT  r.content, r.title, r.user_id, u.username, r.avg_rating, r.id
@@ -129,7 +129,7 @@ def search_with_only_query(query):
     true_results = db.query(sql, [like, like])
     return true_results
 
-def search_with_both(query, classes, results):
+def search_both(query, classes, results):
     like = "%" + query + "%"
     for tag in classes:
         sql="""
@@ -151,12 +151,12 @@ def search(query, classes, page, page_size):
     ids = set()
     promising = []
     if query != "" and len(classes) == 0:
-        true_results = search_with_only_query(query)
+        true_results = search_query(query)
 
     elif query == "" and len(classes) > 0:
-        promising = search_with_only_classes(classes, results)
+        promising = search_classes(classes, results)
     else:
-        promising = search_with_both(query, classes, results)
+        promising = search_both(query, classes, results)
 
     if promising:
         for result in promising:
@@ -175,7 +175,7 @@ def get_all_classes():
     sql = "SELECT title FROM classes"
     return db.query(sql)
 
-def get_classes_of_recipe(recipe_id):
+def get_recipe_classes(recipe_id):
     sql = "SELECT title FROM recipe_classes WHERE recipe_id = ?"
     return db.query(sql, [recipe_id])
 

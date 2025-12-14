@@ -140,7 +140,7 @@ def show_recipe(recipe_id, page=1):
     if not recipe:
         not_found()
     ratings = recipe_book.get_ratings(recipe_id)
-    classes = recipe_book.get_classes_of_recipe(recipe_id)
+    classes = recipe_book.get_recipe_classes(recipe_id)
     rating_count = len(ratings)
     page_count = math.ceil(rating_count / page_size)
     page_count = max(page_count, 1)
@@ -158,7 +158,7 @@ def edit_recipe(recipe_id):
     require_login()
     recipe = recipe_book.get_recipe(recipe_id)
     all_classes = recipe_book.get_all_classes()
-    selected_classes = recipe_book.get_classes_of_recipe(recipe_id)
+    selected_classes = recipe_book.get_recipe_classes(recipe_id)
     selected_classes = [elem["title"] for elem in selected_classes]
     if recipe["user_id"] != session["user_id"]:
         forbidden()
@@ -279,7 +279,7 @@ def show_user(user_id, page=1):
     user = users.get_user(user_id)
     if not user:
         not_found()
-    recipes = recipe_book.get_recipes_by_user(user_id)
+    recipes = recipe_book.get_users_recipes(user_id)
     recipe_count = len(recipes)
     page_count = math.ceil(recipe_count / page_size)
     page_count = max(page_count, 1)
