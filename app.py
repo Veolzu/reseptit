@@ -1,4 +1,3 @@
-import sqlite3
 import math
 import time
 import secrets
@@ -36,6 +35,8 @@ def check_csrf(req):
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
+        if "user_id" in session:
+            return redirect("/")
         return render_template("register.html", filled={})
 
     if request.method == "POST":
@@ -52,13 +53,12 @@ def register():
         if username == "":
             flash("Error: username field can't be empty")
             return render_template("register.html", filled=filled)
-        try:
-            users.create_user(username, password1)
+        success = users.create_user(username, password1)
+        if success:
             flash("Registration was succesful, you can now log in")
             return redirect("/login")
-        except sqlite3.IntegrityError:
-            flash("Error: username is already taken")
-            return render_template("register.html", filled=filled)
+        flash("Error: username is already taken")
+        return render_template("register.html", filled=filled)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -100,9 +100,8 @@ def new_recipe():
 
     if not title or not content or len(title) > 100 or len(content) > 5000:
         forbidden()
-    try:
-        recipe_id = recipe_book.add_recipe(title, content, user_id)
-    except sqlite3.IntegrityError:
+    recipe_id = recipe_book.add_recipe(title, content, user_id)
+    if not recipe_id:
         forbidden()
     all_classes = recipe_book.get_all_classes()
     classes = []
@@ -128,9 +127,8 @@ def new_rating():
 
     if not content or len(content) > 5000:
         forbidden()
-    try:
-        recipe_book.add_rating(content, rating,  user_id, recipe_id)
-    except sqlite3.IntegrityError:
+    success = recipe_book.add_rating(content, rating, user_id, recipe_id)
+    if not success:
         forbidden()
     return redirect("/recipe/" + str(recipe_id))
 
@@ -345,13 +343,3 @@ def index(page=1):
     return render_template("index.html", recipes=recipes, classes=classes,
                             page=page, page_count=page_count)
 
-
-@app.before_request
-def before_request():
-    g.start_time = time.time()
-
-@app.after_request
-def after_request(response):
-    elapsed_time = round(time.time() - g.start_time, 2)
-    print("elapsed time:", elapsed_time, "s")
-    return response

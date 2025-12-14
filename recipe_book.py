@@ -1,4 +1,5 @@
 import db
+import sqlite3
 def get_recipe_count():
     sql = "SELECT COUNT(id) as count FROM recipes"
     result = db.query(sql)
@@ -26,17 +27,21 @@ def get_recipes_by_user(user_id):
 
 def add_recipe(title, content, user_id):
     sql = "INSERT INTO recipes (title, content, user_id) VALUES (?, ?, ?)"
-    db.execute(sql, [title, content, user_id])
-    recipe_id = db.last_insert_id()
-    return recipe_id
-
+    try:
+        db.execute(sql, [title, content, user_id])
+        recipe_id = db.last_insert_id()
+        return recipe_id
+    except sqlite3.IntegrityError:
+        return None
 def add_rating(content, rating, user_id, recipe_id):
     sql = """INSERT INTO ratings (content, rating, user_id, recipe_id)
              VALUES (?, ?, ?, ?)"""
-    db.execute(sql, [content, rating, user_id, recipe_id])
-    set_average_rating(recipe_id)
-
-
+    try:
+        db.execute(sql, [content, rating, user_id, recipe_id])
+        set_average_rating(recipe_id)
+    except sqlite3.IntegrityError:
+        return 0
+    return 1
 
 def get_recipe(recipe_id):
     sql = """SELECT t.id, t.title, t.user_id, u.username, t.content, t.avg_rating
