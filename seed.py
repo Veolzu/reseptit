@@ -42,5 +42,7 @@ for i in range(1, RECIPE_COUNT + 1):
         average = round(the_sum/ n, 2)
         sql = "UPDATE recipes SET avg_rating = ? WHERE id = ?"
         data.execute(sql, [average, i])
+
 data.commit()
 data.close()
+print("Database seeded!")
