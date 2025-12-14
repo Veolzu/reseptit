@@ -60,3 +60,25 @@ the biggest problem with loading the recipe is searching the ratings belonging t
 
 As per my current testing, the search function is unlikely to be largely speeded up by indexes (the for-loops are likely to be the problem, not the sql queries)
 
+# Measuring performance
+
+If you want to measure the loading times of the pages, simply add the following functions to the end of `app.py`
+
+```python
+@app.before_request
+def before_request():
+    g.start_time = time.time()
+
+@app.after_request
+def after_request(response):
+    elapsed_time = round(time.time() - g.start_time, 2)
+    print("elapsed time:", elapsed_time, "s")
+    return response
+
+```
+And run flask in the debug mode with the following command:
+```
+flask run --debug
+
+```
+
